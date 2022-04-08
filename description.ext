@@ -1,0 +1,148 @@
+class CfgFunctions
+{
+	class LND
+	{
+		class ModLoading
+		{
+			class loadVehicles {};
+			class loadFactions {};
+		};
+		class TaskFramework
+		{
+			class taskIntel {};
+			class newTask {};
+			// class taskDefend {};
+			// class taskAttack {};
+			// class taskConvoy {};
+			// class taskCleanup {};
+			
+		};
+		class Utilities
+		{
+			class garrisonBuilding {};
+			class createRect {};
+			class groupName {};
+			class getPlayerPositions {};
+			class doPatrol {};
+		};
+	};
+};
+
+
+class Params
+{
+	class Daytime
+	{
+		title = "Time of day";
+		texts[] = {"Morning","Day","Evening","Night"};
+		values[] = {6,12,18,0};
+		default = 12;
+		function = "BIS_fnc_paramDaytime";
+	};
+
+	class Weather
+	{
+		title = "Weather";
+		texts[] = {"Clear","Overcast","Rain","Storm"};
+		values[] = {0,70,90,100};
+		default = 0;
+		function = "BIS_fnc_paramWeather";
+	};
+
+	class PlayerDamage
+	{
+		title = "Damage to players";
+		texts[] = {"Enabled", "Reduced", "Disabled"};
+		values[] = {2, 1, 0};
+		default = 1;
+	};
+
+	class OPFORFaction
+	{
+		title = "OPFOR";
+		texts[] = {"CSAT", "AAF", "MDF (Requires 3CB)", "AFRF (Requires RHS: AFRF)"};
+		values[] = {0,1,2,3};
+		default = 0;
+	};
+
+	class AAA
+	{
+		title = "AAA threat";
+		texts[] = {"None","Minor","Medium","Major"};
+		values[] = {0,5,10,20};
+		default = 0;
+	};
+
+	class MANPAD
+	{
+		title = "MANPAD threat";
+		texts[] = {"None","Minor","Medium","Major"};
+		values[] = {0,10,50,80};
+		default = 10;
+	};
+
+	class Smoke
+	{
+		title = "Smoke/IR grenades used to mark positions";
+		texts[] = {"Never","Sometimes","Often","Always"};
+		values[] = {0,30,70,100};
+		default = 70;
+	};
+
+	class Intel
+	{
+		title = "Intel picture";
+		texts[] = {"None","Sparse","Moderate","Maximal","Excessive (Debug)"};
+		values[] = {0,1,2,3,4};
+		default = 2;
+	};
+
+	class MissionAttack
+	{
+		title = "Mission type: Attack";
+		texts[] = {"Disabled", "Enabled"};
+		values[] = {0,1};
+		default = 1;
+	};
+
+	class MissionDefend
+	{
+		title = "Mission type: Defend";
+		texts[] = {"Disabled", "Enabled"};
+		values[] = {0,1};
+		default = 1;
+	};
+
+	class MissionConvoy
+	{
+		title = "Mission type: Convoy";
+		texts[] = {"Disabled", "Enabled"};
+		values[] = {0,1};
+		default = 1;
+	};
+
+	class RespawnOnDemand
+	{
+		title = "Respawn on demand";
+		texts[] = {"Disabled", "Enabled"};
+		values[] = {0,1};
+		default = 1;
+	};
+
+	class RepairOnDemand
+	{
+		title = "Repair/Resupply on demand";
+		texts[] = {"Disabled", "Enabled"};
+		values[] = {0,1};
+		default = 1;
+	};
+
+	// class Completion
+	// {
+	// 	title = "% to complete task";
+	// 	texts[] = {"60%", "70%", "80%", "90%", "100%"};
+	// 	values[] = {60, 70, 80, 90, 100};
+	// 	default = 80;
+	// };
+
+};
