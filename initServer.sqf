@@ -9,9 +9,9 @@ safeZone = [getMarkerPos "respawn_start", 1500];
 LND_playerCallsign = selectRandom ["Hornet", "Banshee", "Shriek", "Thunderfoot", "Hammer", "Big-Bird", "Alchemist"];
 
 LND_taskTypes = [];
-if(["MissionAttack", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskAttack };
+// if(["MissionAttack", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskAttack };
 if(["MissionDefend", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskDefend };
-if(["MissionConvoy", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskConvoy };
+// if(["MissionConvoy", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskConvoy };
 
 blufor_infantry = [];
 

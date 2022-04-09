@@ -67,6 +67,15 @@ _mod_planes = ["RHS_Su25SM_vvs", "FIR_AV8B", "RHS_A10", "vn_b_air_f4b_navy_cas"]
 } forEach _mod_planes;
 
 
+// AC130 gets its own special spot, 'cos its a big boi
+// TODO: Make generic for "large vehicles"
+_ac130 = "USAF_AC130U" createVehicle (getMarkerPos "marker_ac130");
+if(not isNull _ac130) then {
+	_ac130 setDir 221; // TODO: better to deliberately orient the spawn location in editor so that it is always north, for cross-map compatibility
+	v_respawn synchronizeObjectsAdd [_ac130];
+};
+
+
 
 if (["RepairOnDemand", 1] call BIS_fnc_getParamValue == 1) then {
 	//_vehicles = nearestObjects [getPos player, ["helicopter", "plane"], 1000];
