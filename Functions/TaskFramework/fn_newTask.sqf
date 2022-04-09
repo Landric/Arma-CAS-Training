@@ -92,22 +92,22 @@ LND_fnc_taskDefend = {
 				};
 				[
 					_units,
-					[], // no vehicles
+					[], 											// no vehicles
 					[[_opforPos, [_distance, 100, _rotate, true]]], // position whitelist
-					[[_position, 100]], // position blacklist
-					["SAD", _position, 10] //waypoint
+					[[_position, 100]], 							// position blacklist
+					["SAD", _position, 10] 							// waypoint
 				] call LND_fnc_spawnOpfor;
 		}
 		catch {
 			// TODO: Suppress this before release
 			systemChat str _exception;
 
-			// TODO: Handle vehicles as well
-			// TODO: Especially AAA
-			opfor_targets = [];
 			{ if(side _x == east) then {deleteVehicle _x }; } forEach allUnits;
+			{ deleteVehicle _x } forEach allDead;
+			{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
 
-			{ [_x] call BIS_fnc_deleteTask; } forEach format ["tsk%1", task_counter] call BIS_fnc_taskChildren;
+			opfor_targets = [];
+			opfor_priorityTargets = [];
 		};
 		break;
 	}; //while
@@ -120,8 +120,10 @@ LND_fnc_taskAttack = {
 
 	params ["_position"];
 
-	_task = [true, format ["tsk%1", task_counter], ["", "Attack Hostiles", _position]] call BIS_fnc_taskCreate;	
-	if(intel > 1) then { [format ["tsk%1", task_counter], "attack"] call BIS_fnc_taskSetType; };
+
+	private _taskIcon = "";
+	if(intel > 1) then { _taskIcon = "attack" };
+	_task = [true, format ["tsk%1", task_counter], ["", "Attack Hostiles", _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 	
 	if (random 101 < smokeChance) then {	
 		smoke = smokeHostile createVehicle _position;
@@ -141,8 +143,9 @@ LND_fnc_taskAttack = {
 		["PAT", _position, 100]
 	] call LND_fnc_spawnOpfor;
 
-	[format ["tsk%1", task_counter], [opfor_priorityTargets select 0, true]] call BIS_fnc_taskSetDestination;
-	
+	if(intel > 0) then {
+		[format ["tsk%1", task_counter], [opfor_priorityTargets select 0, true]] call BIS_fnc_taskSetDestination;
+	};
 
 	// TODO: Use get SAFE position to avoid stacking vehicles
 	
@@ -172,6 +175,15 @@ LND_fnc_taskCleanup = {
 		{ deleteVehicle _x } forEach allDead;
 		{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
 		if(not isNull smoke) then {	deleteVehicle smoke; };
+
+		{
+			private "_a";
+			_a = toArray _x;
+			_a resize 9;
+			if (toString _a isEqualTo "marker_aa") then {
+				deleteMarker _x;
+			};
+		} forEach allMapMarkers;
 
 		opfor_targets = [];
 		opfor_priorityTargets = [];
@@ -294,7 +306,7 @@ LND_fnc_spawnOpfor = {
 // Generate Task //
 ///////////////////
 
-if(!isServer) exitWith { }; // TODO: Probably should not be needed? Does it hinder?
+if(!isServer) exitWith { }; // TODO: Probably not needed ?Does it hinder?
 
 task_counter = task_counter + 1;
 
@@ -325,10 +337,7 @@ _blacklist = ["water", safeZone];
 _blacklist append ([700] call LND_fnc_getPlayerPositions);
 _position = [_whitelist, _blacklist] call BIS_fnc_randomPos;
 
-// TODO: Spawn other types of task
-//[_position] call LND_fnc_taskDefend;
-[_position] call LND_fnc_taskAttack;
-
+[_position] call selectRandom LND_taskTypes;
 
 totalTargets = count opfor_targets;
 
@@ -347,6 +356,7 @@ _blacklist = ["water", safeZone, [_position, 500]];
 _blacklist append ([700] call LND_fnc_getPlayerPositions);
 
 // TODO: Base number/chance of AA on player vehicle?
+
 for "_i" from 0 to random 3 do {
 	if(random 101 < manpadThreat) then {
 		_p = [_whitelist, _blacklist] call BIS_fnc_randomPos;
@@ -363,6 +373,26 @@ for "_i" from 0 to random 3 do {
 
 		if (not (_p isEqualTo [0, 0])) then {
 			_aa_group = [_p, east, selectRandom opfor_manpads] call BIS_fnc_spawnGroup;
+
+
+			if(intel >= 2) then {
+				private _radius = switch (intel) do {
+					case 2: { 200 };
+					case 3: { 100 };
+					default {   0 };
+				};
+				private _markerPos = [[[_p, _radius]]] call BIS_fnc_randomPos;
+				_m = createMarkerLocal [format ["marker_aa_%1", groupId _aa_group], _markerPos];
+				_m setMarkerType "o_antiair";
+				if(_radius > 0) then {
+					_m = createMarkerLocal [format ["marker_aa_area_%1", groupId _aa_group], _markerPos];
+					_m setMarkerShapeLocal "ELLIPSE";
+					_m setMarkerSizeLocal [_radius, _radius];
+					_m setMarkerColorLocal "ColorEAST";
+					_m setMarkerBrushLocal "DiagGrid";
+					_m setMarkerAlpha 0.5;
+				};
+			};			
 		};
 	}
 	else {
@@ -380,6 +410,25 @@ if(random 101 < aaaThreat) then {
 	_p = [[_corridor, [_position, 1000]], _blacklist-["water"]] call BIS_fnc_randomPos;
 	if (not (_p isEqualTo [0, 0])) then {
 		_aaa_vic = [_p, random 360, selectRandom opfor_aaa, east] call BIS_fnc_spawnVehicle;
+
+		if(intel >= 2) then {
+			private _radius = switch (intel) do {
+				case 2: { 200 };
+				case 3: { 100 };
+				default {   0 };
+			};
+			private _markerPos = [[[_p, _radius]]] call BIS_fnc_randomPos;
+			_m = createMarkerLocal [format ["marker_aa_%1", groupId _aa_group], _markerPos];
+			_m setMarkerType "o_antiair";
+			if(_radius > 0) then {
+				_m = createMarkerLocal [format ["marker_aa_area_%1", groupId _aa_group], _markerPos];
+				_m setMarkerShapeLocal "ELLIPSE";
+				_m setMarkerSizeLocal [_radius, _radius];
+				_m setMarkerColorLocal "ColorEAST";
+				_m setMarkerBrushLocal "DiagGrid";
+				_m setMarkerAlpha 0.5;
+			};
+		};
 	};
 };
 
