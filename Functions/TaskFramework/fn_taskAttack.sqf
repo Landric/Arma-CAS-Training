@@ -26,6 +26,7 @@ scriptName "LND\functions\TaskFramework\fn_taskAttack.sqf";
 
 params ["_position"];
 
+if(intel >= 4) then { systemChat "Task type: Attack" ; };
 
 private _taskIcon = "";
 if(intel > 1) then { _taskIcon = "attack" };
@@ -52,5 +53,3 @@ for "_i" from 0 to 3 do {
 if(intel > 0) then {
 	[format ["tsk%1", task_counter], [opfor_priorityTargets select 0, true]] call BIS_fnc_taskSetDestination;
 };
-
-// TODO: Use get SAFE position to avoid stacking vehicles

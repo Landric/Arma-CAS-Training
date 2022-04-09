@@ -26,6 +26,8 @@ scriptName "LND\functions\TaskFramework\fn_taskDefend.sqf";
 
 params ["_position"];
 
+if(intel >= 4) then { systemChat "Task type: Defend" ; };
+
 // TODO: Parameterise BLUFOR faction
 _blufor_group = [_position, west, (selectRandom blufor_infantry)] call BIS_fnc_spawnGroup;
 _blu_waypoint = _blufor_group addWaypoint [_position, 10];

@@ -1,6 +1,8 @@
 
 smokeChance = ["Smoke", 60] call BIS_fnc_getParamValue;
 intel = ["Intel", 2] call BIS_fnc_getParamValue;
+intel = 4;
+systemChat "INTEL HARDCODED TO 4 FOR DEBUGGING";
 manpadThreat = ["MANPAD", 10] call BIS_fnc_getParamValue;
 aaaThreat = ["AAA", 0] call BIS_fnc_getParamValue;
 completionPercent = ["Completion", 80] call BIS_fnc_getParamValue;
@@ -9,7 +11,7 @@ safeZone = [getMarkerPos "respawn_start", 1500];
 LND_playerCallsign = selectRandom ["Hornet", "Banshee", "Shriek", "Thunderfoot", "Hammer", "Big-Bird", "Alchemist"];
 
 LND_taskTypes = [];
-// if(["MissionAttack", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskAttack };
+if(["MissionAttack", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskAttack };
 if(["MissionDefend", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskDefend };
 // if(["MissionConvoy", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskConvoy };
 
@@ -23,7 +25,7 @@ opfor_vehicles_light = [];
 opfor_vehicles_medium = [];
 opfor_vehicles_heavy = [];
 
-task_counter = -1;
+task_counter = 0;
 smoke = objNull;
 smokeFriendly = "";
 smokeHostile = "";
@@ -33,8 +35,7 @@ opfor_priorityTargets = [];
 totalTargets = 0;
 
 
-// TODO: Remove this debug code before release
-//if(intel == 4) then {
+if(intel == 4) then {
 	[] spawn {
 		while{true} do{
 			sleep 0.5;
@@ -68,7 +69,7 @@ totalTargets = 0;
 			} forEach allUnits;
 		};
 	};
-//};
+};
 
 
 

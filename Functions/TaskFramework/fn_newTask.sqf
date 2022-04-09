@@ -26,10 +26,12 @@ if(!isServer) exitWith { }; // TODO: Probably not needed ?Does it hinder?
 
 task_counter = task_counter + 1;
 
+if(intel >= 4) then { systemChat format["Generating task #%1...", task_counter]; };
+
 // The first time newTask is called, the dayTime hasn't been set which means sunOrMoon won't work; so we need to check
 // the parameter directly and compare it to local sunrise/sunset
 private "_isLight";
-if (task_counter == 0) then {
+if (task_counter == 1) then {
 	_daytime = ["Daytime", 12] call BIS_fnc_getParamValue;
 	_sunriseSunset = date call BIS_fnc_sunriseSunsetTime;
 	_isLight = (_daytime > (_sunriseSunset select 0) and _daytime < (_sunriseSunset select 1));
@@ -90,7 +92,7 @@ for "_i" from 0 to random 3 do {
 		if (not (_p isEqualTo [0, 0])) then {
 			_aa_group = [_p, east, selectRandom opfor_manpads] call BIS_fnc_spawnGroup;
 			_aa_group setFormation "DIAMOND";
-			
+
 			if(intel >= 2) then {
 				private _radius = switch (intel) do {
 					case 2: { 200 };
@@ -122,8 +124,18 @@ _whitelist append _aaCorridors;
 _whitelist pushBack [_position, 3000];
 _blacklist = ["water", safeZone, [_position, 1000]];
 _blacklist append ([2000] call LND_fnc_getPlayerPositions);
-if(random 101 < aaaThreat) then {	
-	_p = [[_corridor, [_position, 1000]], _blacklist-["water"]] call BIS_fnc_randomPos;
+if(random 101 < aaaThreat) then {
+	_p = [_whitelist, _blacklist] call BIS_fnc_randomPos;
+	_p = [
+		_p,						// centre
+		0,						// minDist
+		100,					// maxDist
+		10,						// objDist
+		0,						// waterMode (land)
+		0.2,					// maxGrad
+		0,						// shoreMode (land)
+		_blacklist - ["water"]  // blacklist
+	] call BIS_fnc_findSafePos;
 	if (not (_p isEqualTo [0, 0])) then {
 		_aaa_vic = [_p, random 360, selectRandom opfor_aaa, east] call BIS_fnc_spawnVehicle;
 
