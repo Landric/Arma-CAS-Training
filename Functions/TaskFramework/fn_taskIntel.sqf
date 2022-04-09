@@ -7,9 +7,9 @@ scriptName "LND\functions\TaskFramework\fn_taskIntel.sqf";
 		Generates an intel briefing (based on global intel level) for the current task
 		Intel levels are:
 		0 (None) 		- Grid coordinates only, no task marker
-		1 (Sparse)		- Grid coordinates, task marker
-		2 (Moderate)	- As above, plus opfor composition/strength
-		3 (Maximal)		- As above, plus sub tasks/map markers on groups
+		1 (Sparse)		- Grid coordinates, task marker, mission type
+		2 (Moderate)	- As above, plus opfor composition/strength, approximate markers on AA positions
+		3 (Maximal)		- As above, plus sub tasks/map markers on groups, accurate markers on AA positions
 		4 (Debug)		- All of the above, plus precise opfor composition and strength, and real-time map markers for every unit
 
 	Parameter(s):
@@ -94,23 +94,24 @@ _intelStrings pushback (
 
 _intelStrings pushBack format ["Requesting CAS at grid %1.", mapGridPosition _position];
 
-if (intel == 0) then {
-	_intelStrings pushback ["Out."];
+if (intel == 0) exitWith {
+	_intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + (selectRandom [" Out.", " Out to you."])];
 	{ _caller sideChat _x } forEach _intelStrings;
 	[_intelStrings] call LND_fnc_intelToTaskDesc;
+	_intelStrings
 };
 
 // if _taskType = DEFEND
 if(count blufor_units > 0) then {
-	_intelStrings pushback "";
+	_intelStrings pushback "Friendly troops in need of support.";
 }
 else{
 	private "_s";
 	if (count opfor_targets > count opfor_priorityTargets) then {
-		_s = "Large concentration of enemy infantry";
+		_s = "Large concentration of enemy infantry.";
 	}
 	else {
-		_s = "Enemy convoy";
+		_s = "Enemy convoy moving through the area.";
 	};
 
 	_intelStrings pushback _s;
@@ -164,7 +165,7 @@ if(not isNull smoke) then {
 	]);
 };
 
-_intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + " " + (selectRandom ["Out.", "Out to you."])];
+_intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + (selectRandom [" Out.", " Out to you."])];
 
 
 { _caller sideChat _x } forEach _intelStrings;
