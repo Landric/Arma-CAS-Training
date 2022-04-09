@@ -1,3 +1,8 @@
+author			= "Landric";
+onLoadName		= "Landric's CAS Training";
+onLoadMission	= "Complete an infinite amount of missions in order to hone your skills in a variety of aircraft.";
+
+
 class CfgFunctions
 {
 	class LND
@@ -100,25 +105,25 @@ class Params
 	class MissionAttack
 	{
 		title = "Mission type: Attack";
-		texts[] = {"Disabled", "Enabled"};
-		values[] = {0,1};
-		default = 1;
+		texts[] = {"Disabled", "Easy", "Moderate", "Hard"};
+		values[] = {0,1,2,3};
+		default = 2;
 	};
 
 	class MissionDefend
 	{
 		title = "Mission type: Defend";
-		texts[] = {"Disabled", "Enabled"};
-		values[] = {0,1};
-		default = 1;
+		texts[] = {"Disabled", "Easy", "Moderate", "Hard"};
+		values[] = {0,1,2,3};
+		default = 2;
 	};
 
 	class MissionConvoy
 	{
 		title = "Mission type: Convoy";
-		texts[] = {"Disabled", "Enabled"};
-		values[] = {0,1};
-		default = 1;
+		texts[] = {"Disabled", "Easy", "Moderate", "Hard"};
+		values[] = {0,1,2,3};
+		default = 2;
 	};
 
 	class RespawnOnDemand
