@@ -87,7 +87,7 @@ _blacklist append ["water", safeZone];
 			else{
 				if(leader group _unit == _unit) then {
 					//The leader is dead (long live the leader)
-					[group _unit, _unit] spawn {
+					[(group _unit), _unit] spawn {
 						params ["_group", "_prevLeader"];
 						waitUntil {
 							sleep 1;
@@ -96,7 +96,7 @@ _blacklist append ["water", safeZone];
 						};
 						//A new leader has arisen!
 						if(not isNull _group) then {
-							_t = format ["tsk%1_%2", task_counter, groupId (group _group)];
+							_t = format ["tsk%1_%2", task_counter, groupId _group];
 							if(_t call BIS_fnc_taskExists) then {
 								[_t, leader _group] call BIS_fnc_taskSetDestination;
 							};
@@ -154,7 +154,7 @@ _blacklist append ["water", safeZone];
 					};
 					//A new leader has arisen!
 					if(not isNull _group) then {
-						_t = format ["tsk%1_%2", task_counter, groupId (group _group)];
+						_t = format ["tsk%1_%2", task_counter, groupId _group];
 						if(_t call BIS_fnc_taskExists) then {
 							[_t, leader _group] call BIS_fnc_taskSetDestination;
 						};
@@ -186,7 +186,7 @@ _blacklist append ["water", safeZone];
 					};
 					//A new leader has arisen!
 					if(not isNull _group) then {
-						_t = format ["tsk%1_%2", task_counter, groupId (group _group)];
+						_t = format ["tsk%1_%2", task_counter, groupId _group];
 						if(_t call BIS_fnc_taskExists) then {
 							[_t, leader _group] call BIS_fnc_taskSetDestination;
 						};
