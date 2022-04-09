@@ -28,10 +28,10 @@ _plane_locations = [];
 	private "_a";
 	_a = toArray _x;
 	_a resize 12;
-	if (toString _a == "marker_helo_") then {
+	if (toString _a isEqualTo "marker_helo_") then {
 		_helo_locations pushBack _x;
 	};
-	if (toString _a == "marker_plane") then {
+	if (toString _a isEqualTo "marker_plane") then {
 		_plane_locations pushBack _x;
 	};
 } forEach allMapMarkers;
