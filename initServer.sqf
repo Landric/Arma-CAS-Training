@@ -15,6 +15,8 @@ if(["MissionAttack", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pu
 if(["MissionDefend", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskDefend };
 // if(["MissionConvoy", 2] call BIS_fnc_getParamValue >= 1) then { LND_taskTypes pushBack LND_fnc_taskConvoy };
 
+setTimeMultiplier 0.1;
+
 blufor_infantry = [];
 
 opfor_infantry = [];
