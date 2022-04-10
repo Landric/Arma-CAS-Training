@@ -75,8 +75,8 @@ _blacklist append ([700] call LND_fnc_getPlayerPositions);
 
 // TODO: Base number/chance of AA on player vehicle?
 
-for "_i" from 0 to random 3 do {
-	if(random 101 < manpadThreat) then {
+for "_i" from 0 to ([0, 2] call BIS_fnc_randomInt) do {
+	if(([0, 100] call BIS_fnc_randomInt) < manpadThreat) then {
 		_p = [_whitelist, _blacklist] call BIS_fnc_randomPos;
 		_p = [
 			_p,						// centre
@@ -124,7 +124,7 @@ _whitelist append _aaCorridors;
 _whitelist pushBack [_position, 3000];
 _blacklist = ["water", safeZone, [_position, 1000]];
 _blacklist append ([2000] call LND_fnc_getPlayerPositions);
-if(random 101 < aaaThreat) then {
+if(([0, 100] call BIS_fnc_randomInt) < aaaThreat) then {
 	_p = [_whitelist, _blacklist] call BIS_fnc_randomPos;
 	_p = [
 		_p,						// centre

@@ -93,7 +93,7 @@ _blu_waypoint setWaypointType "HOLD";
 } forEach units _blufor_group;
 blufor_units append units _blufor_group;
 
-if (random 101 < smokeChance) then {	
+if (([0, 100] call BIS_fnc_randomInt) < smokeChance) then {	
 	smoke = smokeFriendly createVehicle _position;
 	smoke attachTo [leader _blufor_group];
 	// TODO: Update on leader death?

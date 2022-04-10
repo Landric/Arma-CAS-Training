@@ -49,7 +49,7 @@ private _taskIcon = if(intel > 0) then { "attack" } else { "" };
 private _taskTitle = if(intel > 0) then { "Strike Hostile Forces" } else { "Close Air Support" };
 _task = [true, format ["tsk%1", task_counter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
-if (random 101 < smokeChance) then {	
+if (([0, 100] call BIS_fnc_randomInt) < smokeChance) then {	
 	smoke = smokeHostile createVehicle _position;
 };
 
