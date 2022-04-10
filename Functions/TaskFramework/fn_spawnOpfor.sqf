@@ -116,6 +116,8 @@ _blacklist append ["water", safeZone];
 } forEach _groups;
 
 
+// TODO: 
+systemChat "_position IS NOT DEFINED WITHIN OR PASSED TO THIS FUNCTION!!!!!!";
 
 private "_roadStart";
 if(_spawnOnRoad) then {
@@ -138,6 +140,9 @@ private _usedRoadSegments = [];
 		_road = _roadStart;
 		_connectedRoad = (roadsConnectedTo _road) select 0;
 		while {_road in _usedRoadSegments} do {
+			if(count (roadsConnectedTo _road) <= 1) then {
+				throw "Not enough road!";
+			};
 			_road = _connectedRoad;
 			_connectedRoad = (roadsConnectedTo _road) select 0;
 		};
@@ -241,6 +246,6 @@ private _usedRoadSegments = [];
 
 if(count _waypoint > 0) then {
 	if((_waypoint select 0) isEqualTo "CON") then {
-		//[opfor_priorityTargets] call LND_fnc_doConvoy;
+		[opfor_priorityTargets] call LND_fnc_doConvoy;
 	};
 };
