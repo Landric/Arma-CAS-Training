@@ -18,10 +18,10 @@ class CfgFunctions
 			class taskDefend {};
 			class taskAttack {};
 			class taskConvoy {};
+			class taskSuccessCheck {};
 			class taskCleanup {};
 			class taskIntel {};
 			class spawnOpfor {};
-			
 		};
 		class Utilities
 		{

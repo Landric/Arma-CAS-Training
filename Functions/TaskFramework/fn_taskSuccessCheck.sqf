@@ -22,6 +22,11 @@ scriptName "LND\functions\TaskFramework\fn_taskSuccessCheck.sqf";
 		
 */
 
-if({canFire _x || canMove _x} count opfor_priorityTargets <= 0 and (({alive _x} count opfor_targets) / totalTargets < (100-completionPercent)/100)) then {
+if(intel >=4) then {
+	systemChat "Checking task success...";
+	systemChat format ["%1 priority targets still active, %2/%3 other targets still active", {canFire _x || canMove _x} count opfor_priorityTargets, ({alive _x} count opfor_targets), totalTargets];
+};
+
+if( ({canFire _x || canMove _x} count opfor_priorityTargets <= 0) and ( ({alive _x} count opfor_targets) / totalTargets < (100-completionPercent)/100 ) ) then {
 	["SUCCEEDED"] call LND_fnc_taskCleanup;
 };
