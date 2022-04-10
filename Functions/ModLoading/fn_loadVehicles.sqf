@@ -45,7 +45,7 @@ _mod_helos = ["UK3CB_BAF_Wildcat_AH1_CAS_6A_Arctic", "UK3CB_BAF_Apache_AH1_DDPM"
 	_helo = _x createVehicle (getMarkerPos (_helo_locations select 0));
 	if(isNull _helo) then { continue; }
 	else {
-		_helo setDir 68; // TODO: better to deliberately orient the spawn location in editor so that it is always north, for cross-map compatibility
+		_helo setDir 68; // TODO: better to deliberately choose the spawn location in editor so that it is always (say) north, for cross-map compatibility
 		v_respawn synchronizeObjectsAdd [_helo];
 		_helo_locations deleteAt 0;
 	};
@@ -60,7 +60,7 @@ _mod_planes = ["RHS_Su25SM_vvs", "FIR_AV8B", "RHS_A10", "vn_b_air_f4b_navy_cas"]
 	_plane = _x createVehicle (getMarkerPos (_plane_locations select 0));
 	if(isNull _plane) then { continue; }
 	else {
-		_plane setDir 221; // TODO: better to deliberately orient the spawn location in editor so that it is always north, for cross-map compatibility
+		_plane setDir 221; // TODO: better to deliberately choose the spawn location in editor so that it is always (say) south, for cross-map compatibility
 		v_respawn synchronizeObjectsAdd [_plane];
 		_plane_locations deleteAt 0;
 	};
@@ -71,9 +71,13 @@ _mod_planes = ["RHS_Su25SM_vvs", "FIR_AV8B", "RHS_A10", "vn_b_air_f4b_navy_cas"]
 // TODO: Make generic for "large vehicles"
 _ac130 = "USAF_AC130U" createVehicle (getMarkerPos "marker_ac130");
 if(not isNull _ac130) then {
-	_ac130 setDir 221; // TODO: better to deliberately orient the spawn location in editor so that it is always north, for cross-map compatibility
+	_ac130 setDir 221; // TODO: better to deliberately choose the spawn location in editor so that it is always (say) west, for cross-map compatibility
 	v_respawn synchronizeObjectsAdd [_ac130];
 };
+
+
+// TODO: v_respawn synchronizeObjectsAdd *is* synchronising the vehicles, but they still aren't respawning for some reason
+// TODO: Vehicles only respawn if abandoned ONCE; this is a bug with the module itself.
 
 
 
