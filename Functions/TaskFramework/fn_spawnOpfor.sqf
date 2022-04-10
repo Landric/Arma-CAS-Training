@@ -144,7 +144,7 @@ private _usedRoadSegments = [];
 		
 		_usedRoadSegments pushBack _road;
 		_spawnPos = getPos _road;
-		_spawnDir = [_road, _connectedRoad] call BIS_fnc_DirTo;
+		_spawnDir = [_connectedRoad, _road] call BIS_fnc_DirTo;
 	}
 	else {
 		_spawnPos = [
@@ -240,9 +240,7 @@ private _usedRoadSegments = [];
 
 
 if(count _waypoint > 0) then {
-	// if(count _waypoint != 3) then { throw format ["Unexpected waypoint passed to spawnOpfor: %1", _waypoint]};
-
 	if((_waypoint select 0) isEqualTo "CON") then {
-		[opfor_priorityTargets] call LND_fnc_doConvoy;
+		//[opfor_priorityTargets] call LND_fnc_doConvoy;
 	};
 };
