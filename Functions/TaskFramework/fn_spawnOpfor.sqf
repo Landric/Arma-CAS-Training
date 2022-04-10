@@ -25,7 +25,7 @@ scriptName "LND\functions\TaskFramework\fn_spawnOpfor.sqf";
 
 
 params ["_groups", "_vehicles", "_whitelist", "_blacklist"];
-private _waypoint = param [4, []]; // Expected [Type, location, radius]
+private _waypoint = param [4, []]; // Expected [type, location, radius]
 private _spawnOnRoad = param [5, false]; // Whether vics should be spawned on roads
 
 if(intel >= 4) then { systemChat "Spawning OPFOR..."; };
@@ -116,12 +116,9 @@ _blacklist append ["water", safeZone];
 } forEach _groups;
 
 
-// TODO: 
-systemChat "_position IS NOT DEFINED WITHIN OR PASSED TO THIS FUNCTION!!!!!!";
-
 private "_roadStart";
 if(_spawnOnRoad) then {
-	_nearRoads = _position nearRoads 200;
+	_nearRoads = (getPos ((_whitelist select 0) call BIS_fnc_nearestRoad)) nearRoads 200;
 	if(count _nearRoads > 0) then
 	{
 		_roadStart = _nearRoads select 0;
@@ -132,7 +129,7 @@ if(_spawnOnRoad) then {
 };
 
 private _usedRoadSegments = [];
-{
+{   // forEach _vehicles;
 	private "_spawnPos";
 	private "_spawnDir";
 	if(_spawnOnRoad) then {
@@ -152,10 +149,12 @@ private _usedRoadSegments = [];
 		_spawnDir = [_connectedRoad, _road] call BIS_fnc_DirTo;
 	}
 	else {
+		_centre = (_whitelist select 0) select 0;
+		_maxDist = (_whitelist select 0) select 1;
 		_spawnPos = [
-			_position,				// centre
+			_centre,				// centre
 			0,						// minDist
-			100,					// maxDist
+			_maxDist,				// maxDist
 			10,						// objDist
 			0,						// waterMode (land)
 			0.2,					// maxGrad
