@@ -38,7 +38,6 @@ LND_fnc_generateIntel = {
 };
 
 params ["_position"];
-_position = getPos ([_position] call BIS_fnc_nearestRoad);
 
 if(intel >= 4) then { systemChat "Task type: Convoy" ; };
 
@@ -52,14 +51,39 @@ for "_i" from 0 to 4 do {
 	_vehicles pushback (selectRandom opfor_vehicles_unarmed);
 };
 
-_dest = getPos ([[[[_position, 8000]], [[_position, 2000]]] call BIS_fnc_randomPos] call BIS_fnc_nearestRoad);
-[
-	[],					// no units
-	_vehicles, 			// vehicles
-	[[_position, 20]],	// position whitelist 
-	[],					// position blacklist
-	["CON", _dest, 0]	// waypoint		
-] call LND_fnc_spawnOpfor;
+private _loop = true;
+while { _loop } do {
+	try {
+		_convoyStartPos = getPos ([_position, 6000] call BIS_fnc_nearestRoad);
+		_convoyDestPos = getPos ([[[[_convoyStartPos, 8000]], [[_convoyStartPos, 2000]]] call BIS_fnc_randomPos, 2000] call BIS_fnc_nearestRoad);
+		systemChat str _convoyStartPos;
+		[
+			[],							// no units
+			_vehicles,	 				// vehicles
+			[[_convoyStartPos, 20]],	// position whitelist 
+			[],							// position blacklist
+			["CON", _convoyDestPos, 0],	// waypoint
+			true						// spawnOnRoad
+		] call LND_fnc_spawnOpfor;
+		_loop = false;
+	}
+	catch {
+		if(intel >= 4) then { systemChat str _exception; };
+
+		{ if(side _x == east) then {deleteVehicle _x }; } forEach allUnits;
+		{ deleteVehicle _x } forEach allDead;
+		{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
+
+		opfor_targets = [];
+		opfor_priorityTargets = [];
+	};
+}; //while
+
+
+
+if(intel > 0) then {
+	[format ["tsk%1", task_counter], _position] call BIS_fnc_taskSetDestination;
+};
 
 
 if(intel >= 2) then { call LND_fnc_generateIntel; };
