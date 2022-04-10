@@ -39,7 +39,7 @@ LND_fnc_generateIntel = {
 };
 
 
-// TODO: Generate urban variant of task, with opfor garrisoned in building
+// TODO: Generate urban variant of task, with opfor garrisoned in building / military camp
 
 params ["_position"];
 
@@ -64,13 +64,13 @@ _vehicles = [selectRandom opfor_vehicles_light, selectRandom opfor_vehicles_ligh
 [
 	_units,
 	_vehicles,
-	[[_position, 200]],
+	[[_position, 80]],
 	[],
-	["PAT", _position, 100]
+	["PAT", _position, 250]
 ] call LND_fnc_spawnOpfor;
 
 if(intel > 0) then {
-	[format ["tsk%1", task_counter], [opfor_priorityTargets select 0, true]] call BIS_fnc_taskSetDestination;
+	[format ["tsk%1", task_counter], _position] call BIS_fnc_taskSetDestination;
 };
 
 if(intel >= 2) then { call LND_fnc_generateIntel; };
