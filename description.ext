@@ -40,7 +40,7 @@ class Params
 	class Daytime
 	{
 		title = "Time of day";
-		texts[] = {"Morning","Day","Evening","Night"};
+		texts[] = {"Morning","Noon","Evening","Midnight"};
 		values[] = {6,12,18,0};
 		default = 12;
 		function = "BIS_fnc_paramDaytime";
@@ -124,7 +124,7 @@ class Params
 		title = "Mission type: Convoy";
 		texts[] = {"Disabled", "Easy", "Moderate", "Hard"};
 		values[] = {0,1,2,3};
-		default = 2;
+		default = 1;
 	};
 
 	class RespawnOnDemand
