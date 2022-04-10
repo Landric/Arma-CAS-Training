@@ -57,8 +57,8 @@ for "_i" from 0 to 4 do {
 
 private _loop = true;
 while { _loop } do {
-	try {
-		_convoyStartPos = getPos ([_position, 6000] call BIS_fnc_nearestRoad);
+	// try {
+		_convoyStartPos = getPos ([_position, 10000] call BIS_fnc_nearestRoad);
 		//_convoyDestPos = getPos ([[[[_convoyStartPos, 8000]], [[_convoyStartPos, 2000]]] call BIS_fnc_randomPos, 2000] call BIS_fnc_nearestRoad);
 		[
 			[],							// no units
@@ -69,17 +69,17 @@ while { _loop } do {
 			true						// spawnOnRoad
 		] call LND_fnc_spawnOpfor;
 		_loop = false;
-	}
-	catch {
-		if(intel >= 4) then { systemChat str _exception; };
+	// }
+	// catch {
+	// 	if(intel >= 4) then { systemChat str _exception; };
 
-		{ if(side _x == east) then {deleteVehicle _x }; } forEach allUnits;
-		{ deleteVehicle _x } forEach allDead;
-		{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
+	// 	{ if(side _x == east) then {deleteVehicle _x }; } forEach allUnits;
+	// 	{ deleteVehicle _x } forEach allDead;
+	// 	{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
 
-		opfor_targets = [];
-		opfor_priorityTargets = [];
-	};
+	// 	opfor_targets = [];
+	// 	opfor_priorityTargets = [];
+	// };
 }; //while
 
 
