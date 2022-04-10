@@ -108,7 +108,9 @@ _task = [true, format ["tsk%1", task_counter], ["", _taskTitle, _position], _tas
 
 private "_distance";
 private "_direction";
-while { true } do {
+
+private _loop = true;
+while { _loop } do {
 
 	try {
 			_distance =	selectRandom [400, 600, 800, 1000];
@@ -136,10 +138,10 @@ while { true } do {
 				[[_position, 100]], 							// position blacklist
 				["SAD", _position, 10] 							// waypoint
 			] call LND_fnc_spawnOpfor;
+			_loop = false;
 	}
 	catch {
-		// TODO: Suppress this before release
-		systemChat str _exception;
+		if(intel >= 4) then { systemChat str _exception; };
 
 		{ if(side _x == east) then {deleteVehicle _x }; } forEach allUnits;
 		{ deleteVehicle _x } forEach allDead;
@@ -148,7 +150,6 @@ while { true } do {
 		opfor_targets = [];
 		opfor_priorityTargets = [];
 	};
-	break;
 }; //while
 
 if(intel >= 2) then { [_distance, _direction] call LND_fnc_generateIntel; };
