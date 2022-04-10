@@ -199,7 +199,10 @@ private _usedRoadSegments = [];
 				};
 			};
 		};
-		call LND_fnc_taskSuccessCheck;
+		[] spawn {
+			sleep 3; // Wait a moment to see if the vehicle is disabled
+			call LND_fnc_taskSuccessCheck;
+		};
 	}];
 
 	_v addEventHandler ["Killed", {
