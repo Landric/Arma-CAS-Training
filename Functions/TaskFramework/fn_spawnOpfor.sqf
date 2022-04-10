@@ -26,7 +26,7 @@ scriptName "LND\functions\TaskFramework\fn_spawnOpfor.sqf";
 
 params ["_groups", "_vehicles", "_whitelist", "_blacklist"];
 private _waypoint = param [4, []]; // Expected [Type, location, radius]
-//private _roads = param [5, false]; // Whether vics should be spawned on roads
+private _spawnOnRoad = param [5, false]; // Whether vics should be spawned on roads
 
 if(intel >= 4) then { systemChat "Spawning OPFOR..."; };
 
@@ -50,8 +50,7 @@ _blacklist append ["water", safeZone];
 
 		switch(_waypoint select 0) do {
 			case "PAT": {
-				//[_x, _waypoint select 1, _waypoint select 2] call BIS_fnc_taskPatrol; // Didn't seem to work?
-				[_opfor_group] call LND_fnc_doPatrol;
+				[_opfor_group, _waypoint select 1, _waypoint select 2] call LND_fnc_doPatrol;
 			};
 
 			case "SAD": {
@@ -117,19 +116,51 @@ _blacklist append ["water", safeZone];
 } forEach _groups;
 
 
+
+private "_roadStart";
+if(_spawnOnRoad) then {
+	_nearRoads = _position nearRoads 200;
+	if(count _nearRoads > 0) then
+	{
+		_roadStart = _nearRoads select 0;
+	}
+	else {
+		throw "No nearby road found!";
+	};
+};
+
+private _usedRoadSegments = [];
 {
-	_p = [
-		_position,				// centre
-		0,						// minDist
-		100,					// maxDist
-		10,						// objDist
-		0,						// waterMode (land)
-		0.2,					// maxGrad
-		0,						// shoreMode (land)
-		_blacklist - ["water"]  // blacklist
-	] call BIS_fnc_findSafePos;
-	
-	_v = [_p, random 360, _x, east] call BIS_fnc_spawnVehicle;
+	private "_spawnPos";
+	private "_spawnDir";
+	if(_spawnOnRoad) then {
+
+		_road = _roadStart;
+		_connectedRoad = (roadsConnectedTo _road) select 0;
+		while {_road in _usedRoadSegments} do {
+			_road = _connectedRoad;
+			_connectedRoad = (roadsConnectedTo _road) select 0;
+		};
+		
+		_usedRoadSegments pushBack _road;
+		_spawnPos = getPos _road;
+		_spawnDir = [_road, _connectedRoad] call BIS_fnc_DirTo;
+	}
+	else {
+		_spawnPos = [
+			_position,				// centre
+			0,						// minDist
+			100,					// maxDist
+			10,						// objDist
+			0,						// waterMode (land)
+			0.2,					// maxGrad
+			0,						// shoreMode (land)
+			_blacklist - ["water"]  // blacklist
+		] call BIS_fnc_findSafePos;
+		_spawnDir = random 360;
+	};
+
+	_v = [_spawnPos, _spawnDir, _x, east] call BIS_fnc_spawnVehicle;
 	_v = _v select 0;
 	//_v setUnloadInCombat [false, false];
 	
@@ -212,6 +243,6 @@ if(count _waypoint > 0) then {
 	// if(count _waypoint != 3) then { throw format ["Unexpected waypoint passed to spawnOpfor: %1", _waypoint]};
 
 	if((_waypoint select 0) isEqualTo "CON") then {
-		//[_vehicles] call LND_fnc_doConvoy;
+		[opfor_priorityTargets] call LND_fnc_doConvoy;
 	};
 };
