@@ -22,15 +22,32 @@ scriptName "LND\functions\TaskFramework\fn_taskAttack.sqf";
 		
 */
 
+LND_fnc_generateIntel = {
+	
+	private _intel = "Concentration of enemy troops spotted. Engage and destroy.";
+
+
+	private _desc = format ["tsk%1", task_counter] call BIS_fnc_taskDescription;
+	[
+		format ["tsk%1", task_counter],
+		[
+			_intel,
+			_desc select 1,
+			_desc select 2
+		]
+	] call BIS_fnc_taskSetDescription;	
+};
+
+
 // TODO: Generate urban variant of task, with opfor garrisoned in building
 
 params ["_position"];
 
 if(intel >= 4) then { systemChat "Task type: Attack" ; };
 
-private _taskIcon = "";
-if(intel > 1) then { _taskIcon = "attack" };
-_task = [true, format ["tsk%1", task_counter], ["", "Attack Hostiles", _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
+private _taskIcon = if(intel > 0) then { "attack" } else { "" };
+private _taskTitle = if(intel > 0) then { "Strike Hostile Forces" } else { "Close Air Support" };
+_task = [true, format ["tsk%1", task_counter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
 if (random 101 < smokeChance) then {	
 	smoke = smokeHostile createVehicle _position;
@@ -42,10 +59,12 @@ for "_i" from 0 to 3 do {
 	_units pushBack selectRandom opfor_infantry;
 };
 
+_vehicles = [selectRandom opfor_vehicles_light, selectRandom opfor_vehicles_light];
+
 [
 	_units,
-	[selectRandom opfor_vehicles_light],
-	[[_position, 100]],
+	_vehicles,
+	[[_position, 200]],
 	[],
 	["PAT", _position, 100]
 ] call LND_fnc_spawnOpfor;
@@ -53,3 +72,5 @@ for "_i" from 0 to 3 do {
 if(intel > 0) then {
 	[format ["tsk%1", task_counter], [opfor_priorityTargets select 0, true]] call BIS_fnc_taskSetDestination;
 };
+
+if(intel >= 2) then { call LND_fnc_generateIntel; };

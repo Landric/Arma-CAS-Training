@@ -22,6 +22,40 @@ scriptName "LND\functions\TaskFramework\fn_taskDefend.sqf";
 		
 */
 
+LND_fnc_generateIntel = {
+
+	params ["_distance", "_direction"];
+
+	private _intel = "";
+	_intel = _intel +  selectRandom [
+		"We need immediate air support!",
+		"In need of urgent CAS!"
+	];
+	_intel = _intel +  " ";
+	_intel = _intel +  selectRandom [
+		format ["Hostiles closing in from the %1, say again our %2.", _direction, toUpper _direction],
+		format ["Enemy forces are approximately %1m to our %2.", _distance, _direction]
+	];
+	if(_distance <= 500) then {
+		_intel = _intel +  " Danger close!";
+	};
+
+
+
+
+	private _desc = format ["tsk%1", task_counter] call BIS_fnc_taskDescription;
+	[
+		format ["tsk%1", task_counter],
+		[
+			_intel,
+			_desc select 1,
+			_desc select 2
+		]
+	] call BIS_fnc_taskSetDescription;	
+};
+
+
+
 // TODO: Generate urban variant of task, with blufor garrisoned in building
 
 params ["_position"];
@@ -66,10 +100,14 @@ if (random 101 < smokeChance) then {
 };
 
 
-private _taskIcon = if(intel < 2) then {""} else{"defend"};
-_task = [true, format ["tsk%1", task_counter], ["", "Defend Friendlies", _position], [leader _blufor_group, true], true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
+private _taskIcon = if(intel > 0) then {"defend"} else{""};
+private _taskTitle = if(intel > 0) then { "Support Friendly Forces" } else { "Close Air Support" };
+private _taskDest = if(intel >= 2) then {[leader _blufor_group, true]} else{objNull};
 
+_task = [true, format ["tsk%1", task_counter], ["", _taskTitle, _position], _taskDest, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
+private "_distance";
+private "_direction";
 while { true } do {
 
 	try {
@@ -112,3 +150,5 @@ while { true } do {
 	};
 	break;
 }; //while
+
+if(intel >= 2) then { [_distance, _direction] call LND_fnc_generateIntel; };

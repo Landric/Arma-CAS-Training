@@ -28,8 +28,12 @@ scriptName "LND\functions\TaskFramework\fn_taskIntel.sqf";
 */
 
 
-LND_fnc_intelToTaskDesc = {
+LND_fnc_displayIntel = {
 	params ["_intelStrings"];
+	private _caller = param [1, [west, "HQ"]];
+
+	{ _caller sideChat _x } forEach _intelStrings;
+
 	_desc = format ["tsk%1", task_counter] call BIS_fnc_taskDescription;
 	[
 		format ["tsk%1", task_counter],
@@ -96,31 +100,17 @@ _intelStrings pushBack format ["Requesting CAS at grid %1.", mapGridPosition _po
 
 if (intel == 0) exitWith {
 	_intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + (selectRandom [" Out.", " Out to you."])];
-	{ _caller sideChat _x } forEach _intelStrings;
-	[_intelStrings] call LND_fnc_intelToTaskDesc;
+	[_intelStrings, _caller] call LND_fnc_displayIntel;
 	_intelStrings
 };
 
-// if _taskType = DEFEND
-if(count blufor_units > 0) then {
-	_intelStrings pushback "Friendly troops in need of support.";
-}
-else{
-	private "_s";
-	if (count opfor_targets > count opfor_priorityTargets) then {
-		_s = "Large concentration of enemy infantry.";
-	}
-	else {
-		_s = "Enemy convoy moving through the area.";
-	};
 
-	_intelStrings pushback _s;
+// Incorporate any task-specific information (that has previously been pushed to the task description)
+// as part of the intel package
+_desc = (format ["tsk%1", task_counter] call BIS_fnc_taskDescription) select 0 select 0; // Not sure why this requires two "select 0"s?!
+if(_desc isNotEqualTo "") then {
+	_intelStrings pushback _desc;
 };
-
-
-
-
- 
 
 
 
@@ -168,8 +158,7 @@ if(not isNull smoke) then {
 _intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + (selectRandom [" Out.", " Out to you."])];
 
 
-{ _caller sideChat _x } forEach _intelStrings;
-[_intelStrings] call LND_fnc_intelToTaskDesc;
+[_intelStrings, _caller] call LND_fnc_displayIntel;
 
 
 _intelStrings
