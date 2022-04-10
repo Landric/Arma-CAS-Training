@@ -76,6 +76,8 @@ _blacklist append ["water", safeZone];
 		_x addEventHandler ["Killed", {
 			params ["_unit", "_killer"];
 			
+			if(intel >=4) then { systemChat format ["Unit %1 KILLED by %2", _unit, _killer]; };
+
 			opfor_targets = opfor_targets - [_unit]; // Unneeded if we only count alive units; then again, this might make that count faster?
 			
 			if(({alive _x} count units _unit) <= 0) then {
@@ -135,6 +137,8 @@ _blacklist append ["water", safeZone];
 	
 	_v addEventHandler ["Hit", {
 		params ["_unit", "_source", "_damage", "_instigator"];
+
+		if(intel >=4) then { systemChat format ["Vehicle %1 HIT by %2", _unit, _instigator]; };
 		private "_t";
 		if(not canFire _unit and not canMove _unit) then {
 			_t = format ["tsk%1_%2", task_counter, groupId (group _unit)];
@@ -167,6 +171,7 @@ _blacklist append ["water", safeZone];
 
 	_v addEventHandler ["Killed", {
 		params ["_unit", "_killer", "_instigator", "_useEffects"];
+		if(intel >=4) then { systemChat format ["Vehicle %1 KILLED by %2", _unit, _killer]; };
 		private "_t";
 		if(not canFire _unit and not canMove _unit) then {
 			_t = format ["tsk%1_%2", task_counter, groupId (group _unit)];
