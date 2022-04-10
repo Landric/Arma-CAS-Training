@@ -128,8 +128,6 @@ _blacklist append ["water", safeZone];
 		0,						// shoreMode (land)
 		_blacklist - ["water"]  // blacklist
 	] call BIS_fnc_findSafePos;
-
-	systemChat str _p;
 	
 	_v = [_p, random 360, _x, east] call BIS_fnc_spawnVehicle;
 	_v = _v select 0;
@@ -214,20 +212,6 @@ if(count _waypoint > 0) then {
 	// if(count _waypoint != 3) then { throw format ["Unexpected waypoint passed to spawnOpfor: %1", _waypoint]};
 
 	if((_waypoint select 0) isEqualTo "CON") then {
-
-		private _g = createGroup east;
-		{
-			_x forceFollowRoad true;
-			_x limitSpeed 40;
-			_x setConvoySeparation 30;
-			[_x] joinSilent _g;
-		} forEach opfor_priorityTargets;
-
-		_g setCombatMode "WHITE";
-		_g setCombatBehaviour "SAFE";
-		_g setFormation "COLUMN";
-
-		_waypoint = _g addWaypoint [_waypoint select 1, _waypoint select 2];
-		_waypoint setWaypointType "MOVE";
+		//[_vehicles] call LND_fnc_doConvoy;
 	};
 };

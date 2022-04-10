@@ -30,6 +30,7 @@ class CfgFunctions
 			class groupName {};
 			class getPlayerPositions {};
 			class doPatrol {};
+			class doConvoy {};
 		};
 	};
 };
