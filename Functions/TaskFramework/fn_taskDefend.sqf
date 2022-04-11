@@ -128,7 +128,7 @@ if (([1, 100] call BIS_fnc_randomInt) <= LND_smokeChance) then {
 
 private _taskIcon = if(LND_intel > 0) then {"defend"} else{""};
 private _taskTitle = if(LND_intel > 0) then { "Support Friendly Forces" } else { "Close Air Support" };
-private _taskDest = if(LND_intel >= 2) then {[leader _blufor_group, true]} else{objNull};
+private _taskDest = if(LND_intel >= 2) then {[leader (LND_bluforUnits select 0), true]} else{objNull};
 
 private _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position], _taskDest, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
