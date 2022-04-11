@@ -142,17 +142,16 @@ switch(LND_defendDifficulty) do {
 
 	case 1: {
 		_distance =	selectRandom [600, 800];
-		for "_i" from 0 to (_distance/100)-5 do { _units pushBack selectRandom LND_opforInfantry; };
+		for "_i" from 0 to (_distance/100)-3 do { _units pushBack selectRandom LND_opforInfantry; };
 	};
 	case 2: {
 		_distance =	selectRandom [400, 600, 800, 1000];
-		for "_i" from 0 to (_distance/100)-1 do { _units pushBack selectRandom LND_opforInfantry; };
+		for "_i" from 0 to (_distance/100)-2 do { _units pushBack selectRandom LND_opforInfantry; };
 	};
 	case 3: {
 		_distance =	selectRandom [400, 600, 800, 1000];
-		for "_i" from 0 to (_distance/100)+1 do { _units pushBack selectRandom LND_opforInfantry; };
+		for "_i" from 0 to (_distance/100)-1 do { _units pushBack selectRandom LND_opforInfantry; };
 		_vehicles pushBack selectRandom LND_opforVehiclesLight;
-		[_position] call LND_fnc_spawnBlufor;
 	};
 	case 4: {
 		_distance =	selectRandom [400, 600, 800, 1000, 1200];
