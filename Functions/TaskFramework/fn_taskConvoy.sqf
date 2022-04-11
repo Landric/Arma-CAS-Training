@@ -55,38 +55,27 @@ for "_i" from 0 to 4 do {
 	_vehicles pushback (selectRandom opfor_vehicles_unarmed);
 };
 
-private _loop = true;
-while { _loop } do {
-	// try {
-		_convoyStartPos = getPos ([_position, 10000] call BIS_fnc_nearestRoad);
-		//_convoyDestPos = getPos ([[[[_convoyStartPos, 8000]], [[_convoyStartPos, 2000]]] call BIS_fnc_randomPos, 2000] call BIS_fnc_nearestRoad);
-		[
-			[],							// no units
-			_vehicles,	 				// vehicles
-			[[_convoyStartPos, 20]],	// position whitelist 
-			[],							// position blacklist
-			["CON", objNull, 0],		// waypoint
-			true						// spawnOnRoad
-		] call LND_fnc_spawnOpfor;
-		_loop = false;
-	// }
-	// catch {
-	// 	if(intel >= 4) then { systemChat str _exception; };
-
-	// 	{ if(side _x == east) then {deleteVehicle _x }; } forEach allUnits;
-	// 	{ deleteVehicle _x } forEach allDead;
-	// 	{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
-
-	// 	opfor_targets = [];
-	// 	opfor_priorityTargets = [];
-	// };
-}; //while
-
-
-
-if(intel > 0) then {
-	[format ["tsk%1", task_counter], [opfor_priorityTargets select 0], true] call BIS_fnc_taskSetDestination;
+// Extreme difficulty: add AAA to the convoy
+if(LND_convoyDifficulty >=4) then {
+	_mobileAAA = opfor_aaa select { not _x isKindOf "Turret" };
+	if(count _mobileAAA > 0) then {
+		_vehicles pushback (selectRandom _mobileAAA);
+	};
 };
 
 
-if(intel >= 1) then { call LND_fnc_generateIntel; };
+_convoyStartPos = getPos ([_position, 20000] call BIS_fnc_nearestRoad);
+[
+	[],							// no units
+	_vehicles,	 				// vehicles
+	[[_convoyStartPos, 20]],	// position whitelist 
+	[],							// position blacklist
+	["CON", objNull, 0],		// waypoint
+	true						// spawnOnRoad
+] call LND_fnc_spawnOpfor;
+
+
+if(intel >= 1) then {
+	[format ["tsk%1", task_counter], [opfor_priorityTargets select 0], true] call BIS_fnc_taskSetDestination;
+	call LND_fnc_generateIntel;
+};
