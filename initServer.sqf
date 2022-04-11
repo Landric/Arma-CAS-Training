@@ -14,8 +14,8 @@ LND_defendDifficulty = ["MissionDefend", 2] call BIS_fnc_getParamValue;
 LND_convoyDifficulty = ["MissionConvoy", 2] call BIS_fnc_getParamValue;
 
 LND_taskTypes = [];
-// if(LND_attackDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskAttack };
-// if(LND_defendDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskDefend };
+if(LND_attackDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskAttack };
+if(LND_defendDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskDefend };
 if(LND_convoyDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskConvoy };
 
 setTimeMultiplier 0.1;
