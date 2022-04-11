@@ -47,7 +47,7 @@ if(LND_intel >= 4) then { systemChat "Task type: Attack" ; };
 
 private _taskIcon = if(LND_intel > 0) then { "attack" } else { "" };
 private _taskTitle = if(LND_intel > 0) then { "Strike Hostile Forces" } else { "Close Air Support" };
-_task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
+private _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
 if (([0, 100] call BIS_fnc_randomInt) < LND_smokeChance) then {	
 	LND_smoke = LND_smokeHostile createVehicle _position;
@@ -59,7 +59,7 @@ for "_i" from 0 to 3 do {
 	_units pushBack selectRandom LND_opforInfantry;
 };
 
-_vehicles = [selectRandom LND_opforVehiclesLight, selectRandom LND_opforVehiclesLight];
+private _vehicles = [selectRandom LND_opforVehiclesLight, selectRandom LND_opforVehiclesLight];
 
 [
 	_units,

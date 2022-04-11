@@ -81,8 +81,8 @@ params ["_position"];
 if(LND_intel >= 4) then { systemChat "Task type: Defend" ; };
 
 // TODO: Parameterise BLUFOR faction
-_blufor_group = [_position, west, (selectRandom LND_bluforInfantry)] call BIS_fnc_spawnGroup;
-_blu_waypoint = _blufor_group addWaypoint [_position, 10];
+private _blufor_group = [_position, west, (selectRandom LND_bluforInfantry)] call BIS_fnc_spawnGroup;
+private _blu_waypoint = _blufor_group addWaypoint [_position, 10];
 _blu_waypoint setWaypointType "HOLD";
 // _blufor_group enableDynamicSimulation true;
 // { _x triggerDynamicSimulation false; } forEach units _blufor_group;
@@ -126,7 +126,7 @@ private _taskIcon = if(LND_intel > 0) then {"defend"} else{""};
 private _taskTitle = if(LND_intel > 0) then { "Support Friendly Forces" } else { "Close Air Support" };
 private _taskDest = if(LND_intel >= 2) then {[leader _blufor_group, true]} else{objNull};
 
-_task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position], _taskDest, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
+private _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position], _taskDest, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
 private "_distance";
 private "_direction";
@@ -137,14 +137,14 @@ while { _loop } do {
 	try {
 			_distance =	selectRandom [400, 600, 800, 1000];
 			_direction = selectRandom ["north","east","south","west"];
-			_opforPos = switch(_direction) do {
+			private _opforPos = switch(_direction) do {
 				case "north": { [(_position select 0),             (_position select 1) + _distance] };
 				case  "east": { [(_position select 0) + _distance, (_position select 1)            ] };
 				case "south": { [(_position select 0),             (_position select 1) - _distance] };
 				case  "west": { [(_position select 0) - _distance, (_position select 1)            ] };
 			};
 
-			_rotate = 0;
+			private _rotate = 0;
 			if( _direction isEqualTo "east" || _direction isEqualTo "west") then {
 				_rotate = 90;
 			};
