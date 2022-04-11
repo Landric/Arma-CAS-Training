@@ -245,8 +245,15 @@ private _usedRoadSegments = [];
 	if(LND_intel >= 3 or (LND_intel >= 1 and ((_waypoint select 0) isEqualTo "CON"))) then {
 		_task = [true, [format ["tsk%1_%2", LND_taskCounter, groupId group _v], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
 	};
-} forEach _vehicles;
 
+	if(count _waypoint > 0) then {
+		if((_waypoint select 0) isEqualTo "SAD") then {
+			_op_waypoint = _x addWaypoint [_waypoint select 1, _waypoint select 2];
+			_op_waypoint setWaypointType (_waypoint select 0);
+			_x setCombatMode "RED";
+		};
+	};
+} forEach _vehicles;
 
 if(count _waypoint > 0) then {
 	if((_waypoint select 0) isEqualTo "CON") then {
