@@ -49,7 +49,7 @@ private _taskIcon = if(LND_intel > 0) then { "attack" } else { "" };
 private _taskTitle = if(LND_intel > 0) then { "Strike Hostile Forces" } else { "Close Air Support" };
 private _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
-if (([0, 100] call BIS_fnc_randomInt) < LND_smokeChance) then {	
+if (([1, 100] call BIS_fnc_randomInt) <= LND_smokeChance) then {	
 	LND_smoke = LND_smokeHostile createVehicle _position;
 };
 
@@ -105,7 +105,6 @@ switch(LND_attackDifficulty) do {
 	};
 	default { throw format ["Unexpected Attack task difficulty: %1", LND_attackDifficulty]; };
 };
-
 
 [
 	_units,
