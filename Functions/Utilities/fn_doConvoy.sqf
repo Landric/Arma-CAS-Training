@@ -27,7 +27,12 @@ private _forceNext = false;
 for "_i" from 0 to 1000 do {
 	systemChat str _i;
 	if(count (roadsConnectedTo _prevRoad) > 1) then {
-		_connectedRoad = (roadsConnectedTo _prevRoad) select 1;
+		if ((roadsConnectedTo _prevRoad) select 1 != _prevRoad) then {
+			_connectedRoad = (roadsConnectedTo _prevRoad) select 1;
+		}
+		else{
+			_connectedRoad = (roadsConnectedTo _prevRoad) select 0;
+		};
 		_prevRoad = _connectedRoad;
 
 		if(_i % 50 == 0 || _forceNext) then {
