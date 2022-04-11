@@ -118,15 +118,15 @@ if(_desc isNotEqualTo "") then {
 // tbh this whole function is massively over-complicated for very little benefit....
 if(not isNull LND_smoke) then {
 
-	private "_LND_smoke";
+	private "_smoke";
 	private "_friendOrFoe";
 
 	if(count LND_bluforUnits > 1) then {
-		_LND_smoke = LND_smokeFriendly;
+		_smoke = LND_smokeFriendly;
 		_friendOrFoe = "Friendly";
 	}
 	else {
-		_LND_smoke = LND_smokeHostile;
+		_smoke = LND_smokeHostile;
 		_friendOrFoe = "Hostile";
 	};
 
@@ -134,14 +134,14 @@ if(not isNull LND_smoke) then {
 	private "_secondary";
 	// TODO: Account for any other colours of smoke
 
-	switch(_LND_smoke) do {
-		case "LND_smokeShellBlue_Infinite": {
-			_color = "blue LND_smoke";
-			_secondary = "BLUE LND_smoke";
+	switch(_smoke) do {
+		case "SmokeShellBlue_Infinite": {
+			_color = "blue smoke";
+			_secondary = "BLUE smoke";
 		};
-		case "LND_smokeShellRed_Infinite": {
-			_color = "red LND_smoke";
-			_secondary = "RED LND_smoke";
+		case "SmokeShellRed_Infinite": {
+			_color = "red smoke";
+			_secondary = "RED smoke";
 		};
 		case "B_IRStrobe": {
 			_color = "IR strobes";

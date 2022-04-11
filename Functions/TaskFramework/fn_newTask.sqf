@@ -41,8 +41,8 @@ else {
 };
 
 if (_isLight) then {
-	LND_smokeFriendly = "LND_smokeShellBlue_Infinite";
-	LND_smokeHostile = "LND_smokeShellRed_Infinite";
+	LND_smokeFriendly = "SmokeShellBlue_Infinite";
+	LND_smokeHostile = "SmokeShellRed_Infinite";
 }
 else {
 	LND_smokeFriendly = "B_IRStrobe";
@@ -94,7 +94,7 @@ for "_i" from 0 to ([0, 2] call BIS_fnc_randomInt) do {
 			_aa_group setFormation "DIAMOND";
 
 			if(LND_intel >= 2) then {
-				private _radius = switch (intel) do {
+				private _radius = switch (LND_intel) do {
 					case 2: { 200 };
 					case 3: { 100 };
 					default {   0 };
@@ -140,7 +140,7 @@ if(([1, 100] call BIS_fnc_randomInt) <= LND_aaaThreat) then {
 		_aaa_vic = [_p, random 360, selectRandom LND_opforAAA, east] call BIS_fnc_spawnVehicle;
 
 		if(LND_intel >= 2) then {
-			private _radius = switch (intel) do {
+			private _radius = switch (LND_intel) do {
 				case 2: { 200 };
 				case 3: { 100 };
 				default {   0 };
