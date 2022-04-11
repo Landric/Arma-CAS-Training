@@ -172,35 +172,15 @@ private _usedRoadSegments = [];
 		params ["_unit", "_source", "_damage", "_instigator"];
 
 		if(LND_intel >=4) then { systemChat format ["Vehicle %1 HIT by %2", _unit, _instigator]; };
-		private "_t";
-		if(not canFire _unit and not canMove _unit) then {
-			_t = format ["tsk%1_%2", LND_taskCounter, groupId (group _unit)];
-			if(_t call BIS_fnc_taskExists) then {
-				[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
-			};
-		}
-		else{
-			if(leader group _unit == _unit) then {
-				//The leader is dead (long live the leader)
-				[group _unit, _unit] spawn {
-					params ["_group", "_prevLeader"];
-					waitUntil {
-						sleep 1;
-						//Checking leader...
-						(leader _group != _prevLeader) or isNull _group
-					};
-					//A new leader has arisen!
-					if(not isNull _group) then {
-						_t = format ["tsk%1_%2", LND_taskCounter, groupId _group];
-						if(_t call BIS_fnc_taskExists) then {
-							[_t, leader _group] call BIS_fnc_taskSetDestination;
-						};
-					};
-				};
-			};
-		};
-		[] spawn {
+		[_unit] spawn {
+			params ["_unit"];
 			sleep 3; // Wait a moment to see if the vehicle is disabled
+			if(not canFire _unit and not canMove _unit) then {
+				private _t = format ["tsk%1_%2", LND_taskCounter, _unit];
+				if(_t call BIS_fnc_taskExists) then {
+					[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
+				};
+			}
 			call LND_fnc_taskSuccessCheck;
 		};
 	}];
@@ -210,31 +190,11 @@ private _usedRoadSegments = [];
 		if(LND_intel >=4) then { systemChat format ["Vehicle %1 KILLED by %2", _unit, _killer]; };
 		private "_t";
 		if(not canFire _unit and not canMove _unit) then {
-			_t = format ["tsk%1_%2", LND_taskCounter, groupId (group _unit)];
+			_t = format ["tsk%1_%2", LND_taskCounter, _unit];
 			if(_t call BIS_fnc_taskExists) then {
 				[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
 			};
 		}
-		else{
-			if(leader group _unit == _unit) then {
-				//The leader is dead (long live the leader)
-				[group _unit, _unit] spawn {
-					params ["_group", "_prevLeader"];
-					waitUntil {
-						sleep 1;
-						//Checking leader...
-						(leader _group != _prevLeader) or isNull _group
-					};
-					//A new leader has arisen!
-					if(not isNull _group) then {
-						_t = format ["tsk%1_%2", LND_taskCounter, groupId _group];
-						if(_t call BIS_fnc_taskExists) then {
-							[_t, leader _group] call BIS_fnc_taskSetDestination;
-						};
-					};
-				};
-			};
-		};
 		call LND_fnc_taskSuccessCheck;
 	}];
 
@@ -243,7 +203,7 @@ private _usedRoadSegments = [];
 	// While convoys are unpredictable, force task markers for all vehicles in convoy at all but the lowest intel level
 	// TODO: Remove once fixed
 	if(LND_intel >= 3 or (LND_intel >= 1 and ((_waypoint select 0) isEqualTo "CON"))) then {
-		_task = [true, [format ["tsk%1_%2", LND_taskCounter, groupId group _v], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
+		_task = [true, [format ["tsk%1_%2", LND_taskCounter, _v], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
 	};
 
 	if(count _waypoint > 0) then {
