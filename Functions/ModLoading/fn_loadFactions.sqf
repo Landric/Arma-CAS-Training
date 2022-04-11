@@ -22,9 +22,6 @@ scriptName "LND\functions\LoadMods\fn_loadFactions.sqf";
 
 */
 
-// TODO: Standardise on using groups vs individual units; accounting for vehicles etc.
-
-
 try {
 	switch((["BLUFORFaction", 0] call BIS_fnc_getParamValue)) do {
 		default {

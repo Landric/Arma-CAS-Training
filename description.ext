@@ -64,6 +64,14 @@ class Params
 		default = 1;
 	};
 
+	class BLUFORFaction
+	{
+		title = "BLUFOR";
+		texts[] = {"NATO"};
+		values[] = {0};
+		default = 0;
+	};
+
 	class OPFORFaction
 	{
 		title = "OPFOR";
