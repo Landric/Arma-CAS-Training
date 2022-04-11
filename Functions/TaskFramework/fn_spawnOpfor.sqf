@@ -77,10 +77,10 @@ _blacklist append ["water", safeZone];
 			
 			if(intel >=4) then { systemChat format ["Unit %1 KILLED by %2", _unit, _killer]; };
 
-			opfor_targets = opfor_targets - [_unit]; // Unneeded if we only count alive units; then again, this might make that count faster?
+			LND_opforTargets = LND_opforTargets - [_unit]; // Unneeded if we only count alive units; then again, this might make that count faster?
 			
 			if(({alive _x} count units _unit) <= 0) then {
-				_t = format ["tsk%1_%2", task_counter, groupId (group _unit)];
+				_t = format ["tsk%1_%2", LND_taskCounter, groupId (group _unit)];
 				if(_t call BIS_fnc_taskExists) then {
 					[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
 				};
@@ -97,7 +97,7 @@ _blacklist append ["water", safeZone];
 						};
 						//A new leader has arisen!
 						if(not isNull _group) then {
-							_t = format ["tsk%1_%2", task_counter, groupId _group];
+							_t = format ["tsk%1_%2", LND_taskCounter, groupId _group];
 							if(_t call BIS_fnc_taskExists) then {
 								[_t, leader _group] call BIS_fnc_taskSetDestination;
 							};
@@ -108,10 +108,10 @@ _blacklist append ["water", safeZone];
 			call LND_fnc_taskSuccessCheck;
 		}];
 	} forEach units _opfor_group;
-	opfor_targets append units _opfor_group;
+	LND_opforTargets append units _opfor_group;
 	
 	if(intel >= 3) then {
-		_task = [true, [format ["tsk%1_%2", task_counter, groupId _opfor_group], format ["tsk%1", task_counter]], ["", "Destroy Hostiles", _p], [leader _opfor_group, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
+		_task = [true, [format ["tsk%1_%2", LND_taskCounter, groupId _opfor_group], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _p], [leader _opfor_group, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
 	};
 } forEach _groups;
 
@@ -174,7 +174,7 @@ private _usedRoadSegments = [];
 		if(intel >=4) then { systemChat format ["Vehicle %1 HIT by %2", _unit, _instigator]; };
 		private "_t";
 		if(not canFire _unit and not canMove _unit) then {
-			_t = format ["tsk%1_%2", task_counter, groupId (group _unit)];
+			_t = format ["tsk%1_%2", LND_taskCounter, groupId (group _unit)];
 			if(_t call BIS_fnc_taskExists) then {
 				[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
 			};
@@ -191,7 +191,7 @@ private _usedRoadSegments = [];
 					};
 					//A new leader has arisen!
 					if(not isNull _group) then {
-						_t = format ["tsk%1_%2", task_counter, groupId _group];
+						_t = format ["tsk%1_%2", LND_taskCounter, groupId _group];
 						if(_t call BIS_fnc_taskExists) then {
 							[_t, leader _group] call BIS_fnc_taskSetDestination;
 						};
@@ -210,7 +210,7 @@ private _usedRoadSegments = [];
 		if(intel >=4) then { systemChat format ["Vehicle %1 KILLED by %2", _unit, _killer]; };
 		private "_t";
 		if(not canFire _unit and not canMove _unit) then {
-			_t = format ["tsk%1_%2", task_counter, groupId (group _unit)];
+			_t = format ["tsk%1_%2", LND_taskCounter, groupId (group _unit)];
 			if(_t call BIS_fnc_taskExists) then {
 				[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
 			};
@@ -227,7 +227,7 @@ private _usedRoadSegments = [];
 					};
 					//A new leader has arisen!
 					if(not isNull _group) then {
-						_t = format ["tsk%1_%2", task_counter, groupId _group];
+						_t = format ["tsk%1_%2", LND_taskCounter, groupId _group];
 						if(_t call BIS_fnc_taskExists) then {
 							[_t, leader _group] call BIS_fnc_taskSetDestination;
 						};
@@ -238,16 +238,16 @@ private _usedRoadSegments = [];
 		call LND_fnc_taskSuccessCheck;
 	}];
 
-	opfor_priorityTargets pushBack _v;
+	LND_opforPriorityTargets pushBack _v;
 
 	if(intel >= 3) then {
-		_task = [true, [format ["tsk%1_%2", task_counter, groupId group _v], format ["tsk%1", task_counter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
+		_task = [true, [format ["tsk%1_%2", LND_taskCounter, groupId group _v], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
 	};
 } forEach _vehicles;
 
 
 if(count _waypoint > 0) then {
 	if((_waypoint select 0) isEqualTo "CON") then {
-		[opfor_priorityTargets] call LND_fnc_doConvoy;
+		[LND_opforPriorityTargets] call LND_fnc_doConvoy;
 	};
 };

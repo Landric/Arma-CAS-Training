@@ -24,14 +24,14 @@ scriptName "LND\functions\TaskFramework\fn_newTask.sqf";
 
 if(!isServer) exitWith { }; // TODO: Probably not needed ?Does it hinder?
 
-task_counter = task_counter + 1;
+LND_taskCounter = LND_taskCounter + 1;
 
-if(intel >= 4) then { systemChat format["Generating task #%1...", task_counter]; };
+if(intel >= 4) then { systemChat format["Generating task #%1...", LND_taskCounter]; };
 
 // The first time newTask is called, the dayTime hasn't been set which means sunOrMoon won't work; so we need to check
 // the parameter directly and compare it to local sunrise/sunset
 private "_isLight";
-if (task_counter == 1) then {
+if (LND_taskCounter == 1) then {
 	_daytime = ["Daytime", 12] call BIS_fnc_getParamValue;
 	_sunriseSunset = date call BIS_fnc_sunriseSunsetTime;
 	_isLight = (_daytime > (_sunriseSunset select 0) and _daytime < (_sunriseSunset select 1));
@@ -41,12 +41,12 @@ else {
 };
 
 if (_isLight) then {
-	smokeFriendly = "SmokeShellBlue_Infinite";
-	smokeHostile = "SmokeShellRed_Infinite";
+	LND_smokeFriendly = "LND_smokeShellBlue_Infinite";
+	LND_smokeHostile = "LND_smokeShellRed_Infinite";
 }
 else {
-	smokeFriendly = "B_IRStrobe";
-	smokeHostile = "B_IRStrobe";
+	LND_smokeFriendly = "B_IRStrobe";
+	LND_smokeHostile = "B_IRStrobe";
 };
 
 
@@ -57,7 +57,7 @@ _position = [_whitelist, _blacklist] call BIS_fnc_randomPos;
 
 [_position] call selectRandom LND_taskTypes;
 
-totalTargets = count opfor_targets;
+LND_totalTargets = count LND_opforTargets;
 
 // Spawn AA around the AO, and between the player and the zone
 private _aaCorridors = [];
@@ -90,7 +90,7 @@ for "_i" from 0 to ([0, 2] call BIS_fnc_randomInt) do {
 		] call BIS_fnc_findSafePos;
 
 		if (not (_p isEqualTo [0, 0])) then {
-			_aa_group = [_p, east, selectRandom opfor_manpads] call BIS_fnc_spawnGroup;
+			_aa_group = [_p, east, selectRandom LND_opforManpads] call BIS_fnc_spawnGroup;
 			_aa_group setFormation "DIAMOND";
 
 			if(intel >= 2) then {
@@ -137,7 +137,7 @@ if(([0, 100] call BIS_fnc_randomInt) < aaaThreat) then {
 		_blacklist - ["water"]  // blacklist
 	] call BIS_fnc_findSafePos;
 	if (not (_p isEqualTo [0, 0])) then {
-		_aaa_vic = [_p, random 360, selectRandom opfor_aaa, east] call BIS_fnc_spawnVehicle;
+		_aaa_vic = [_p, random 360, selectRandom LND_opforAAA, east] call BIS_fnc_spawnVehicle;
 
 		if(intel >= 2) then {
 			private _radius = switch (intel) do {
@@ -160,12 +160,12 @@ if(([0, 100] call BIS_fnc_randomInt) < aaaThreat) then {
 	};
 };
 
-if(count blufor_units > 0) then {
-	[_position, group (blufor_units select 0)] call LND_fnc_taskIntel;
+if(count LND_bluforUnits > 0) then {
+	[_position, group (LND_bluforUnits select 0)] call LND_fnc_taskIntel;
 }
 else {
 	[_position, selectRandom ["HQ", "BLU"]] call LND_fnc_taskIntel;
 };
 
 
-format ["tsk%1", task_counter] call BIS_fnc_taskSetCurrent;
+format ["tsk%1", LND_taskCounter] call BIS_fnc_taskSetCurrent;

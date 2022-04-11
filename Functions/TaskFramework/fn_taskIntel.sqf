@@ -34,9 +34,9 @@ LND_fnc_displayIntel = {
 
 	{ _caller sideChat _x } forEach _intelStrings;
 
-	_desc = format ["tsk%1", task_counter] call BIS_fnc_taskDescription;
+	_desc = format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription;
 	[
-		format ["tsk%1", task_counter],
+		format ["tsk%1", LND_taskCounter],
 		[
 			format ['"%1"', _intelStrings joinString "<br/>"],
 			_desc select 1,
@@ -107,7 +107,7 @@ if (intel == 0) exitWith {
 
 // Incorporate any task-specific information (that has previously been pushed to the task description)
 // as part of the intel package
-_desc = (format ["tsk%1", task_counter] call BIS_fnc_taskDescription) select 0 select 0; // Not sure why this requires two "select 0"s?!
+_desc = (format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription) select 0 select 0; // Not sure why this requires two "select 0"s?!
 if(_desc isNotEqualTo "") then {
 	_intelStrings pushback _desc;
 };
@@ -116,32 +116,32 @@ if(_desc isNotEqualTo "") then {
 
 // TODO: This is probably massively over-complicated for very little benefit - might as well just pass in the required line
 // tbh this whole function is massively over-complicated for very little benefit....
-if(not isNull smoke) then {
+if(not isNull LND_smoke) then {
 
-	private "_smoke";
+	private "_LND_smoke";
 	private "_friendOrFoe";
 
-	if(count blufor_units > 1) then {
-		_smoke = smokeFriendly;
+	if(count LND_bluforUnits > 1) then {
+		_LND_smoke = LND_smokeFriendly;
 		_friendOrFoe = "Friendly";
 	}
 	else {
-		_smoke = smokeHostile;
+		_LND_smoke = LND_smokeHostile;
 		_friendOrFoe = "Hostile";
 	};
 
 	private "_color";
 	private "_secondary";
-	// TODO: Account for any other colours of smoke
+	// TODO: Account for any other colours of LND_smoke
 
-	switch(_smoke) do {
-		case "SmokeShellBlue_Infinite": {
-			_color = "blue smoke";
-			_secondary = "BLUE smoke";
+	switch(_LND_smoke) do {
+		case "LND_smokeShellBlue_Infinite": {
+			_color = "blue LND_smoke";
+			_secondary = "BLUE LND_smoke";
 		};
-		case "SmokeShellRed_Infinite": {
-			_color = "red smoke";
-			_secondary = "RED smoke";
+		case "LND_smokeShellRed_Infinite": {
+			_color = "red LND_smoke";
+			_secondary = "RED LND_smoke";
 		};
 		case "B_IRStrobe": {
 			_color = "IR strobes";

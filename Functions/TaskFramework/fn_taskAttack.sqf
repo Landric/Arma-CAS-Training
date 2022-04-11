@@ -27,9 +27,9 @@ LND_fnc_generateIntel = {
 	private _intel = "Concentration of enemy troops spotted. Engage and destroy.";
 
 
-	private _desc = format ["tsk%1", task_counter] call BIS_fnc_taskDescription;
+	private _desc = format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription;
 	[
-		format ["tsk%1", task_counter],
+		format ["tsk%1", LND_taskCounter],
 		[
 			_intel,
 			_desc select 1,
@@ -47,19 +47,19 @@ if(intel >= 4) then { systemChat "Task type: Attack" ; };
 
 private _taskIcon = if(intel > 0) then { "attack" } else { "" };
 private _taskTitle = if(intel > 0) then { "Strike Hostile Forces" } else { "Close Air Support" };
-_task = [true, format ["tsk%1", task_counter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
+_task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
-if (([0, 100] call BIS_fnc_randomInt) < smokeChance) then {	
-	smoke = smokeHostile createVehicle _position;
+if (([0, 100] call BIS_fnc_randomInt) < LND_smokeChance) then {	
+	LND_smoke = LND_smokeHostile createVehicle _position;
 };
 
 // TODO: Vary number of units (based on difficulty?)
 private _units = [];
 for "_i" from 0 to 3 do {
-	_units pushBack selectRandom opfor_infantry;
+	_units pushBack selectRandom LND_opforInfantry;
 };
 
-_vehicles = [selectRandom opfor_vehicles_light, selectRandom opfor_vehicles_light];
+_vehicles = [selectRandom LND_opforVehiclesLight, selectRandom LND_opforVehiclesLight];
 
 [
 	_units,
@@ -70,6 +70,6 @@ _vehicles = [selectRandom opfor_vehicles_light, selectRandom opfor_vehicles_ligh
 ] call LND_fnc_spawnOpfor;
 
 if(intel >= 1) then {
-	[format ["tsk%1", task_counter], _position] call BIS_fnc_taskSetDestination;
+	[format ["tsk%1", LND_taskCounter], _position] call BIS_fnc_taskSetDestination;
 	call LND_fnc_generateIntel;
 };

@@ -26,14 +26,14 @@ params ["_state"];
 
 if(!isServer) exitWith { }; // TODO: is this needed? Does it hinder?
 
-if (not (format ["tsk%1", task_counter] call BIS_fnc_taskCompleted)) then {
+if (not (format ["tsk%1", LND_taskCounter] call BIS_fnc_taskCompleted)) then {
 
-	[format ["tsk%1", task_counter], _state] call BIS_fnc_taskSetState;	
+	[format ["tsk%1", LND_taskCounter], _state] call BIS_fnc_taskSetState;	
 
 	{ if(!isPlayer _x) then {deleteVehicle _x }; } forEach allUnits;
 	{ deleteVehicle _x } forEach allDead;
 	{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
-	if(not isNull smoke) then {	deleteVehicle smoke; };
+	if(not isNull LND_smoke) then {	deleteVehicle LND_smoke; };
 
 	{
 		private "_a";
@@ -44,9 +44,9 @@ if (not (format ["tsk%1", task_counter] call BIS_fnc_taskCompleted)) then {
 		};
 	} forEach allMapMarkers;
 
-	opfor_targets = [];
-	opfor_priorityTargets = [];
-	blufor_units = [];
+	LND_opforTargets = [];
+	LND_opforPriorityTargets = [];
+	LND_bluforUnits = [];
 	LND_ffIncidents = 0;
 
 	[] spawn {

@@ -1,8 +1,6 @@
 
-smokeChance = ["Smoke", 60] call BIS_fnc_getParamValue;
+LND_smokeChance = ["LND_smoke", 60] call BIS_fnc_getParamValue;
 intel = ["Intel", 2] call BIS_fnc_getParamValue;
-intel = 4;
-systemChat format ["INTEL HARDCODED TO %1 FOR DEBUGGING", intel];
 manpadThreat = ["MANPAD", 10] call BIS_fnc_getParamValue;
 aaaThreat = ["AAA", 0] call BIS_fnc_getParamValue;
 completionPercent = ["Completion", 80] call BIS_fnc_getParamValue;
@@ -22,25 +20,25 @@ if(LND_convoyDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskConvoy }
 
 setTimeMultiplier 0.1;
 
-blufor_infantry = [];
+LND_bluforInfantry = [];
 LND_ffIncidents = 0;
 
-opfor_infantry = [];
-opfor_aaa = [];
-opfor_manpads = [];
-opfor_vehicles_unarmed = [];
-opfor_vehicles_light = [];
-opfor_vehicles_medium = [];
-opfor_vehicles_heavy = [];
+LND_opforInfantry = [];
+LND_opforAAA = [];
+LND_opforManpads = [];
+LND_opforVehiclesUnarmed = [];
+LND_opforVehiclesLight = [];
+LND_opforVehiclesMedium = [];
+LND_opforVehiclesHeavy = [];
 
-task_counter = 0;
-smoke = objNull;
-smokeFriendly = "";
-smokeHostile = "";
-blufor_units = [];
-opfor_targets = [];
-opfor_priorityTargets = [];
-totalTargets = 0;
+LND_taskCounter = 0;
+LND_smoke = objNull;
+LND_smokeFriendly = "";
+LND_smokeHostile = "";
+LND_bluforUnits = [];
+LND_opforTargets = [];
+LND_opforPriorityTargets = [];
+LND_totalTargets = 0;
 
 
 if(intel == 4) then {
