@@ -93,7 +93,7 @@ switch(LND_attackDifficulty) do {
 			case 2;
 			case 3: { _vehicles pushback selectRandom LND_opforVehiclesHeavy; };
 			case 4: {
-				if(LND_aaaThread > 0) then {
+				if(LND_aaaThreat > 0) then {
 					_vehicles pushback selectRandom LND_opforAAA;
 				}
 				else {
