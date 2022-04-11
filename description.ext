@@ -125,7 +125,7 @@ class Params
 		title = "Mission type: Convoy";
 		texts[] = {"Disabled", "Easy", "Moderate", "Hard", "Extreme"};
 		values[] = {0,1,2,3,4};
-		default = 1;
+		default = 2;
 	};
 
 	class RespawnOnDemand

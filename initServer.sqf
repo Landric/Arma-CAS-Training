@@ -11,7 +11,7 @@ LND_playerCallsign = selectRandom ["Hornet", "Banshee", "Shriek", "Thunderfoot",
 
 LND_attackDifficulty = ["MissionAttack", 2] call BIS_fnc_getParamValue;
 LND_defendDifficulty = ["MissionDefend", 2] call BIS_fnc_getParamValue;
-LND_convoyDifficulty = ["MissionConvoy", 1] call BIS_fnc_getParamValue;
+LND_convoyDifficulty = ["MissionConvoy", 2] call BIS_fnc_getParamValue;
 
 LND_taskTypes = [];
 // if(LND_attackDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskAttack };
