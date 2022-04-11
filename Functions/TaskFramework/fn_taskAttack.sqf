@@ -69,8 +69,7 @@ _vehicles = [selectRandom opfor_vehicles_light, selectRandom opfor_vehicles_ligh
 	["PAT", _position, 250]
 ] call LND_fnc_spawnOpfor;
 
-if(intel > 0) then {
+if(intel >= 1) then {
 	[format ["tsk%1", task_counter], _position] call BIS_fnc_taskSetDestination;
+	call LND_fnc_generateIntel;
 };
-
-if(intel >= 1) then { call LND_fnc_generateIntel; };
