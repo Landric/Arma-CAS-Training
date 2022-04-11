@@ -75,11 +75,9 @@ LND_fnc_generateIntel = {
 
 LND_fnc_spawnBlufor = {
 	params ["_position"];
-	_amount = param [1, 1];
 
-	// TODO: Spawn a given amount (and join together as a group)
 	private _blufor_group = [_position, west, (selectRandom LND_bluforInfantry)] call BIS_fnc_spawnGroup;
-	private _blu_waypoint = _blufor_group addWaypoint [_position, 10];
+	private _blu_waypoint = _blufor_group addWaypoint [_position, 20];
 	_blu_waypoint setWaypointType "HOLD";
 	// _blufor_group enableDynamicSimulation true;
 	// { _x triggerDynamicSimulation false; } forEach units _blufor_group;
@@ -122,7 +120,7 @@ if(LND_intel >= 4) then { systemChat "Task type: Defend" ; };
 
 [_position] call LND_fnc_spawnBlufor;
 
-if (([0, 100] call BIS_fnc_randomInt) < LND_smokeChance) then {	
+if (([1, 100] call BIS_fnc_randomInt) <= LND_smokeChance) then {	
 	LND_smoke = LND_smokeFriendly createVehicle _position;
 	LND_smoke attachTo [LND_bluforUnits select 0];
 };
@@ -134,6 +132,7 @@ private _taskDest = if(LND_intel >= 2) then {[leader _blufor_group, true]} else{
 
 private _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position], _taskDest, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
+private "_direction";
 private "_distance";
 private _units = [];
 private _vehicles = [];
@@ -142,20 +141,24 @@ switch(LND_defendDifficulty) do {
 	case 0: { throw "Defend tasks are disabled - why are we generating one?!"; };
 
 	case 1: {
-		_distance =	selectRandom [400, 600, 800, 1000];
-		for "_i" from 0 to (_distance/100)-1 do {_units pushBack selectRandom LND_opforInfantry; };
+		_distance =	selectRandom [600, 800];
+		for "_i" from 0 to (_distance/100)-5 do { _units pushBack selectRandom LND_opforInfantry; };
 	};
 	case 2: {
 		_distance =	selectRandom [400, 600, 800, 1000];
-		for "_i" from 0 to (_distance/100)-1 do {_units pushBack selectRandom LND_opforInfantry; };
+		for "_i" from 0 to (_distance/100)-1 do { _units pushBack selectRandom LND_opforInfantry; };
 	};
 	case 3: {
 		_distance =	selectRandom [400, 600, 800, 1000];
-		for "_i" from 0 to (_distance/100)-1 do {_units pushBack selectRandom LND_opforInfantry; };
+		for "_i" from 0 to (_distance/100)+1 do { _units pushBack selectRandom LND_opforInfantry; };
+		_vehicles pushBack selectRandom LND_opforVehiclesLight;
+		[_position] call LND_fnc_spawnBlufor;
 	};
 	case 4: {
-		_distance =	selectRandom [400, 600, 800, 1000];
-		for "_i" from 0 to (_distance/100)-1 do {_units pushBack selectRandom LND_opforInfantry; };
+		_distance =	selectRandom [400, 600, 800, 1000, 1200];
+		for "_i" from 0 to (_distance/100)+3 do { _units pushBack selectRandom LND_opforInfantry; };
+		_vehicles pushBack selectRandom LND_opforVehiclesMedium;
+		[_position] call LND_fnc_spawnBlufor;
 	};
 	default { throw format ["Unexpected Defend task difficulty: %1", LND_defendDifficulty]; };
 };
@@ -164,7 +167,6 @@ private _loop = true;
 while { _loop } do {
 	private _viableDirections = ["north","east","south","west"];
 	while {count _viableDirections > 0 and _loop} do {
-		private "_direction";
 		try {
 				_direction = selectRandom _viableDirections;
 				_viableDirections = _viableDirections - [_direction];
