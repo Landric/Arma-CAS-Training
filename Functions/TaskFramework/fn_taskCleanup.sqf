@@ -47,6 +47,7 @@ if (not (format ["tsk%1", task_counter] call BIS_fnc_taskCompleted)) then {
 	opfor_targets = [];
 	opfor_priorityTargets = [];
 	blufor_units = [];
+	LND_ffIncidents = 0;
 
 	[] spawn {
 		sleep 3;

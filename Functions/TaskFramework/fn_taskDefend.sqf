@@ -26,28 +26,46 @@ LND_fnc_generateIntel = {
 
 	params ["_distance", "_direction"];
 
-	private _intel = "";
-	_intel = _intel +  selectRandom [
+	private _intelString = "";
+	_intelString = _intelString +  selectRandom [
 		"We need immediate air support!",
 		"In need of urgent CAS!"
 	];
-	_intel = _intel +  " ";
-	_intel = _intel +  selectRandom [
-		format ["Hostiles closing in from the %1, say again our %2.", _direction, toUpper _direction],
-		format ["Enemy forces are approximately %1m to our %2.", _distance, _direction]
-	];
-	if(_distance <= 500) then {
-		_intel = _intel +  " Danger close!";
+	_intelString = _intelString +  " ";
+	// Show direction only
+	if(intel < 2) then {
+		_intelString = _intelString +  selectRandom [
+			format ["Hostiles closing in from the %1, say again our %2.", _direction, toUpper _direction],
+		];
+	}
+	// Show direction, distance, and composition
+	else {
+		_intelString = _intelString +  selectRandom [
+			format ["Enemy forces are approximately %1m to our %2.", _distance, _direction]
+		];
+
+		if(count opfor_priorityTargets > 0) then {
+			_intelString = _intelString +  selectRandom [
+				"Enemy infantry supported by vehicles closing on our position!"
+			];
+		}
+		else {
+			_intelString = _intelString +  selectRandom [
+				"Large concentration of enemy infantry."
+			];
+		};
 	};
 
-
+	if(_distance <= 500) then {
+		_intelString = _intelString +  " Danger close!";
+	};
 
 
 	private _desc = format ["tsk%1", task_counter] call BIS_fnc_taskDescription;
 	[
 		format ["tsk%1", task_counter],
 		[
-			_intel,
+			_intelString,
 			_desc select 1,
 			_desc select 2
 		]
@@ -81,9 +99,13 @@ _blu_waypoint setWaypointType "HOLD";
 			else{
 				leader _unit sideChat _ffString;
 			};
+
+			LND_ffIncidents = LND_ffIncidents + 1;
 			
-			// TODO: Keep track of number of friendly kills (per task); only fail on repeat
-			["FAILED"] call LND_fnc_taskCleanup;
+			// Scale friendly fire forgiveness based on difficulty
+			if(LND_ffIncidents > (4 - LND_defendDifficulty)) then {
+				["FAILED"] call LND_fnc_taskCleanup;
+			};
 		};
 		blufor_units = blufor_units - [_unit];
 		if({alive _x} count blufor_units < 1) then {
@@ -152,4 +174,4 @@ while { _loop } do {
 	};
 }; //while
 
-if(intel >= 2) then { [_distance, _direction] call LND_fnc_generateIntel; };
+if(intel >= 1) then { [_distance, _direction] call LND_fnc_generateIntel; };
