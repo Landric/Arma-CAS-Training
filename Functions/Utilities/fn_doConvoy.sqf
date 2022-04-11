@@ -25,7 +25,6 @@ _prevRoad = [getPos leader _g] call BIS_fnc_nearestRoad;
 private "_connectedRoad";
 private _forceNext = false;
 for "_i" from 0 to 1000 do {
-	systemChat str _i;
 	if(count (roadsConnectedTo _prevRoad) > 1) then {
 		if ((roadsConnectedTo _prevRoad) select 1 != _prevRoad) then {
 			_connectedRoad = (roadsConnectedTo _prevRoad) select 1;

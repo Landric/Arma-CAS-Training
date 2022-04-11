@@ -240,7 +240,9 @@ private _usedRoadSegments = [];
 
 	LND_opforPriorityTargets pushBack _v;
 
-	if(LND_intel >= 3) then {
+	// While convoys are unpredictable, force task markers for all vehicles in convoy at all but the lowest intel level
+	// TODO: Remove once fixed
+	if(LND_intel >= 3 or (LND_intel >= 1 and ((_waypoint select 0) isEqualTo "CON"))) then {
 		_task = [true, [format ["tsk%1_%2", LND_taskCounter, groupId group _v], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
 	};
 } forEach _vehicles;
