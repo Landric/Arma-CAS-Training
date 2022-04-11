@@ -53,18 +53,64 @@ if (([0, 100] call BIS_fnc_randomInt) < LND_smokeChance) then {
 	LND_smoke = LND_smokeHostile createVehicle _position;
 };
 
-// TODO: Vary number of units (based on difficulty?)
-private _units = [];
-for "_i" from 0 to 3 do {
-	_units pushBack selectRandom LND_opforInfantry;
+
+private _units = [selectRandom LND_opforInfantry, selectRandom LND_opforInfantry, selectRandom LND_opforInfantry];
+private _vehicles = [];
+private _radius = 80;
+switch(LND_attackDifficulty) do {
+	// Disabled
+	case 0: { throw "Attack tasks are disabled - why are we generating one?!"; };
+	// Easy - infantry only
+	case 1: { };
+	// Medium - infantry and (up to) a pair of light vehicles
+	case 2: {
+		_vehicles pushback selectRandom LND_opforVehiclesLight;
+		if([0, 1] call BIS_fnc_randomInt == 1) then {
+			_units pushBack selectRandom LND_opforInfantry;
+		}
+		else {
+			_vehicles pushback selectRandom LND_opforVehiclesLight;
+		};
+	};
+	// Hard - more infantry, supported by a medium or (rarely) heavy vehicle 
+	case 3: {
+		_radius = 120;
+		_units pushBack selectRandom LND_opforInfantry;
+		if([0, 4] call BIS_fnc_randomInt < 4) then {
+			_vehicles pushback selectRandom LND_opforVehiclesMedium;
+		}
+		else{
+			_vehicles pushback selectRandom LND_opforVehiclesHeavy;
+		};
+	};
+	// Extreme - even more infantry, supported by a pair of medium vehicles or a heavy vehicle or (if not disabled) triple-A
+	case 4: {
+		_radius = 200;
+		for "_i" from 0 to 2 do { _units pushBack selectRandom LND_opforInfantry; };
+		switch([0, 4] call BIS_fnc_randomInt) do {
+			case 0;
+			case 1: { for "_i" from 0 to 1 do { _vehicles pushback selectRandom LND_opforVehiclesMedium; }; };
+			case 2;
+			case 3: { _vehicles pushback selectRandom LND_opforVehiclesHeavy; };
+			case 4: {
+				if(LND_aaaThread > 0) then {
+					_vehicles pushback selectRandom LND_opforAAA;
+				}
+				else {
+					for "_i" from 0 to 1 do { _vehicles pushback selectRandom LND_opforVehiclesHeavy; };
+				};
+			};
+		};
+		
+	};
+	default { throw format ["Unexpected Attack task difficulty: %1", LND_attackDifficulty]; };
 };
 
-private _vehicles = [selectRandom LND_opforVehiclesLight, selectRandom LND_opforVehiclesLight];
 
 [
 	_units,
 	_vehicles,
-	[[_position, 80]],
+	[[_position, _radius]],
 	[],
 	["PAT", _position, 250]
 ] call LND_fnc_spawnOpfor;
