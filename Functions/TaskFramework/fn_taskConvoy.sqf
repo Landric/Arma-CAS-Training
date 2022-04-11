@@ -59,7 +59,7 @@ for "_i" from 0 to 4 do {
 _vehicles = [];
 switch(LND_convoyDifficulty) do {
 	// Disabled
-	case 0: { throw "Convoys are disabled - why are we generating one?!"; };
+	case 0: { throw "Convoy tasks are disabled - why are we generating one?!"; };
 	// Easy - unarmed only
 	case 1: { for "_i" from 0 to 2 do {	_vehicles pushback (selectRandom LND_opforVehiclesUnarmed); }; };
 	// Medium - unarmed supported by light escort
@@ -75,15 +75,14 @@ switch(LND_convoyDifficulty) do {
 		_vehicles pushback selectRandom LND_opforVehiclesHeavy;
 		for "_i" from 0 to 2 do {	_vehicles pushback (selectRandom LND_opforVehiclesMedium); };
 		_mobileAAA = LND_opforAAA select { not (_x isKindOf "Turret") };
-		if(count _mobileAAA > 0) then {
+		if((count _mobileAAA > 0) and (LND_aaaThread > 0)) then {
 			_vehicles pushback (selectRandom _mobileAAA);
 		}
 		else{
 			_vehicles pushback selectRandom LND_opforVehiclesHeavy;
 		};
 	};
-	default { throw format ["Unexpected Convoy difficulty: %1", LND_convoyDifficulty]; };
-
+	default { throw format ["Unexpected Convoy task difficulty: %1", LND_convoyDifficulty]; };
 };
 
 
