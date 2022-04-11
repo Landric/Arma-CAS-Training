@@ -55,12 +55,27 @@ for "_i" from 0 to 4 do {
 	_vehicles pushback (selectRandom opfor_vehicles_unarmed);
 };
 
-// Extreme difficulty: add AAA to the convoy
-if(LND_convoyDifficulty >=4) then {
-	_mobileAAA = opfor_aaa select { not (_x isKindOf "Turret") };
-	if(count _mobileAAA > 0) then {
-		_vehicles pushback (selectRandom _mobileAAA);
+
+_vehicles = [];
+switch(LND_convoyDifficulty) do {
+	case 0: { throw "Convoys are disabled - why are we generating one?!"; };
+	case 1: { for "_i" from 0 to 4 do {	_vehicles pushback (selectRandom opfor_vehicles_unarmed); }; };
+	case 2: {};
+	case 3: {};
+	// Extreme difficulty: add AAA to the convoy
+	case 4: {
+		_vehicles pushback selectRandom opfor_vehicles_heavy;
+		for "_i" from 0 to 4 do {	_vehicles pushback (selectRandom LND_opforVehiclesMedium); };
+		_mobileAAA = opfor_aaa select { not (_x isKindOf "Turret") };
+		if(count _mobileAAA > 0) then {
+			_vehicles pushback (selectRandom _mobileAAA);
+		}
+		else{
+			_vehicles pushback selectRandom opfor_vehicles_heavy;
+		};
 	};
+	default { throw format ["Unexpected Convoy difficulty: %1", LND_convoyDifficulty]; };
+
 };
 
 
