@@ -89,4 +89,4 @@ if(intel > 0) then {
 };
 
 
-if(intel >= 2) then { call LND_fnc_generateIntel; };
+if(intel >= 1) then { call LND_fnc_generateIntel; };

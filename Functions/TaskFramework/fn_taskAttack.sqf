@@ -73,4 +73,4 @@ if(intel > 0) then {
 	[format ["tsk%1", task_counter], _position] call BIS_fnc_taskSetDestination;
 };
 
-if(intel >= 2) then { call LND_fnc_generateIntel; };
+if(intel >= 1) then { call LND_fnc_generateIntel; };
