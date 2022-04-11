@@ -37,11 +37,10 @@ catch {
 	];
 };
 
-
-
 try {
 	switch((["OPFORFaction", 0] call BIS_fnc_getParamValue)) do {
 
+		// AAF
 		case 1: {
 			LND_opforInfantry = [
 				(configfile >> "CfgGroups" >> "Indep" >> "IND_F" >> "Infantry" >> "HAF_InfSquad"),
@@ -57,7 +56,12 @@ try {
 			LND_opforVehiclesHeavy = ["I_MBT_03_cannon_F"];
 
 	    };
+	    // MDF
 	    case 2: {
+	    	if(!isClass(configfile >> "CfgGroups" >> "East" >> "UK3CB_MDF_O")) then {
+	    		throw "UK3CB not loaded!"
+	    	};
+
 			LND_opforInfantry = [
 				(configfile >> "CfgGroups" >> "East" >> "UK3CB_MDF_O" >> "Infantry" >> "UK3CB_MDF_O_RIF_Squad"),
 				(configfile >> "CfgGroups" >> "East" >> "UK3CB_MDF_O" >> "Infantry" >> "UK3CB_MDF_O_MK_Squad"),
@@ -77,7 +81,12 @@ try {
 			LND_opforVehiclesHeavy = ["UK3CB_MDF_O_Warrior_Camo", "UK3CB_MDF_O_Warrior_Cage_Camo", "UK3CB_MDF_O_M60A3"];
 
 	    };
+	    // AFRF
 	    case 3: {
+	    	if(!isClass(configfile >> "CfgGroups" >> "East" >> "rhs_faction_msv")) then {
+	    		throw "RHS not loaded!"
+	    	};
+
 			LND_opforInfantry = [
 				(configfile >> "CfgGroups" >> "East" >> "rhs_faction_msv" >> "rhs_group_rus_msv_infantry_emr" >> "rhs_group_rus_msv_infantry_emr_squad"),
 				(configfile >> "CfgGroups" >> "East" >> "rhs_faction_msv" >> "rhs_group_rus_msv_infantry_emr" >> "rhs_group_rus_msv_infantry_emr_squad_2mg"),
@@ -94,11 +103,12 @@ try {
 			LND_opforVehiclesMedium = ["rhs_btr70_msv","rhs_btr80_msv","rhs_bmp1_msv"];
 			LND_opforVehiclesHeavy = ["rhs_btr80a_msv", "rhs_bmp3_late_msv", "rhs_t72bd_tv"];
 	    };
+	    // CSAT
 		default {
 			LND_opforInfantry = [
 				(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfAssault"),
 				(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfSquad"),
-				(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfWeapons")
+				(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfSquad_Weapons")
 			];
 
 			LND_opforAAA = ["O_APC_Tracked_02_AA_F"];
@@ -113,10 +123,12 @@ try {
 }
 // If something goes wrong (e.g. if the correct mod isn't loaded), default to vanilla CSAT
 catch {
+	systemChat str _exception;
+	systemChat "Defaulting to OPFOR: CSAT";
 	LND_opforInfantry = [
 		(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfAssault"),
 		(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfSquad"),
-		(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfWeapons")
+		(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfSquad_Weapons")
 	];
 
 	LND_opforAAA = ["O_APC_Tracked_02_AA_F"];
