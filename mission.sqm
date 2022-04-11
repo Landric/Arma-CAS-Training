@@ -20,10 +20,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={15030.695,89.624687,16860.551};
-		dir[]={0.82082522,-0.53309119,-0.2051076};
-		up[]={0.51719052,0.84605563,-0.12923561};
-		aside[]={-0.24242662,-2.910383e-009,-0.97017282};
+		pos[]={15144.877,36.363438,16881.902};
+		dir[]={0.8208214,-0.53308868,-0.20510659};
+		up[]={0.51718664,0.84605938,-0.12923442};
+		aside[]={-0.24242575,7.4505806e-009,-0.97017002};
 	};
 };
 binarizationWanted=0;
@@ -2589,6 +2589,7 @@ class Mission
 			flags=4;
 			class Attributes
 			{
+				presenceCondition="isMultiplayer";
 				reportRemoteTargets=1;
 				receiveRemoteTargets=1;
 				reportOwnPosition=1;
@@ -2712,6 +2713,7 @@ class Mission
 			};
 			areaSize[]={15,0,15};
 			areaIsRectangle=1;
+			presenceCondition="isMultiplayer";
 			flags=1;
 			id=132;
 			type="ModuleHideTerrainObjects_F";
