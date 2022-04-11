@@ -35,7 +35,7 @@ LND_fnc_generateIntel = {
 	// Show direction only
 	if(intel < 2) then {
 		_intelString = _intelString +  selectRandom [
-			format ["Hostiles closing in from the %1, say again our %2.", _direction, toUpper _direction],
+			format ["Hostiles closing in from the %1, say again our %2.", _direction, toUpper _direction]
 		];
 	}
 	// Show direction, distance, and composition

@@ -57,7 +57,7 @@ for "_i" from 0 to 4 do {
 
 // Extreme difficulty: add AAA to the convoy
 if(LND_convoyDifficulty >=4) then {
-	_mobileAAA = opfor_aaa select { not _x isKindOf "Turret" };
+	_mobileAAA = opfor_aaa select { not (_x isKindOf "Turret") };
 	if(count _mobileAAA > 0) then {
 		_vehicles pushback (selectRandom _mobileAAA);
 	};
