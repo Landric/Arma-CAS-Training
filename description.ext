@@ -107,24 +107,24 @@ class Params
 	class MissionAttack
 	{
 		title = "Mission type: Attack";
-		texts[] = {"Disabled", "Easy", "Moderate", "Hard"};
-		values[] = {0,1,2,3};
+		texts[] = {"Disabled", "Easy", "Moderate", "Hard", "Extreme"};
+		values[] = {0,1,2,3,4};
 		default = 2;
 	};
 
 	class MissionDefend
 	{
 		title = "Mission type: Defend";
-		texts[] = {"Disabled", "Easy", "Moderate", "Hard"};
-		values[] = {0,1,2,3};
+		texts[] = {"Disabled", "Easy", "Moderate", "Hard", "Extreme"};
+		values[] = {0,1,2,3,4};
 		default = 2;
 	};
 
 	class MissionConvoy
 	{
 		title = "Mission type: Convoy";
-		texts[] = {"Disabled", "Easy", "Moderate", "Hard"};
-		values[] = {0,1,2,3};
+		texts[] = {"Disabled", "Easy", "Moderate", "Hard", "Extreme"};
+		values[] = {0,1,2,3,4};
 		default = 1;
 	};
 
