@@ -28,9 +28,9 @@ params ["_groups", "_vehicles", "_whitelist", "_blacklist"];
 private _waypoint = param [4, []]; // Expected [type, location, radius]
 private _spawnOnRoad = param [5, false]; // Whether vics should be spawned on roads
 
-if(intel >= 4) then { systemChat "Spawning OPFOR..."; };
+if(LND_intel >= 4) then { systemChat "Spawning OPFOR..."; };
 
-_blacklist append ["water", safeZone];
+_blacklist append ["water", LND_safeZone];
 
 { //forEach _groups
 	// TODO: Replace with get SAFE pos
@@ -75,7 +75,7 @@ _blacklist append ["water", safeZone];
 		_x addEventHandler ["Killed", {
 			params ["_unit", "_killer"];
 			
-			if(intel >=4) then { systemChat format ["Unit %1 KILLED by %2", _unit, _killer]; };
+			if(LND_intel >=4) then { systemChat format ["Unit %1 KILLED by %2", _unit, _killer]; };
 
 			LND_opforTargets = LND_opforTargets - [_unit]; // Unneeded if we only count alive units; then again, this might make that count faster?
 			
@@ -110,7 +110,7 @@ _blacklist append ["water", safeZone];
 	} forEach units _opfor_group;
 	LND_opforTargets append units _opfor_group;
 	
-	if(intel >= 3) then {
+	if(LND_intel >= 3) then {
 		_task = [true, [format ["tsk%1_%2", LND_taskCounter, groupId _opfor_group], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _p], [leader _opfor_group, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
 	};
 } forEach _groups;
@@ -171,7 +171,7 @@ private _usedRoadSegments = [];
 	_v addEventHandler ["Hit", {
 		params ["_unit", "_source", "_damage", "_instigator"];
 
-		if(intel >=4) then { systemChat format ["Vehicle %1 HIT by %2", _unit, _instigator]; };
+		if(LND_intel >=4) then { systemChat format ["Vehicle %1 HIT by %2", _unit, _instigator]; };
 		private "_t";
 		if(not canFire _unit and not canMove _unit) then {
 			_t = format ["tsk%1_%2", LND_taskCounter, groupId (group _unit)];
@@ -207,7 +207,7 @@ private _usedRoadSegments = [];
 
 	_v addEventHandler ["Killed", {
 		params ["_unit", "_killer", "_instigator", "_useEffects"];
-		if(intel >=4) then { systemChat format ["Vehicle %1 KILLED by %2", _unit, _killer]; };
+		if(LND_intel >=4) then { systemChat format ["Vehicle %1 KILLED by %2", _unit, _killer]; };
 		private "_t";
 		if(not canFire _unit and not canMove _unit) then {
 			_t = format ["tsk%1_%2", LND_taskCounter, groupId (group _unit)];
@@ -240,7 +240,7 @@ private _usedRoadSegments = [];
 
 	LND_opforPriorityTargets pushBack _v;
 
-	if(intel >= 3) then {
+	if(LND_intel >= 3) then {
 		_task = [true, [format ["tsk%1_%2", LND_taskCounter, groupId group _v], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
 	};
 } forEach _vehicles;

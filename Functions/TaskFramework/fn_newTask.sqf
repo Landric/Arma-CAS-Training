@@ -26,7 +26,7 @@ if(!isServer) exitWith { }; // TODO: Probably not needed ?Does it hinder?
 
 LND_taskCounter = LND_taskCounter + 1;
 
-if(intel >= 4) then { systemChat format["Generating task #%1...", LND_taskCounter]; };
+if(LND_intel >= 4) then { systemChat format["Generating task #%1...", LND_taskCounter]; };
 
 // The first time newTask is called, the dayTime hasn't been set which means sunOrMoon won't work; so we need to check
 // the parameter directly and compare it to local sunrise/sunset
@@ -51,7 +51,7 @@ else {
 
 
 _whitelist = ([6000] call LND_fnc_getPlayerPositions);
-_blacklist = ["water", safeZone];
+_blacklist = ["water", LND_safeZone];
 _blacklist append ([700] call LND_fnc_getPlayerPositions);
 _position = [_whitelist, _blacklist] call BIS_fnc_randomPos;
 
@@ -70,13 +70,13 @@ private _aaCorridors = [];
 _whitelist = [];
 _whitelist append _aaCorridors;
 _whitelist pushBack [_position, 1000];
-_blacklist = ["water", safeZone, [_position, 500]];
+_blacklist = ["water", LND_safeZone, [_position, 500]];
 _blacklist append ([700] call LND_fnc_getPlayerPositions);
 
 // TODO: Base number/chance of AA on player vehicle?
 
 for "_i" from 0 to ([0, 2] call BIS_fnc_randomInt) do {
-	if(([0, 100] call BIS_fnc_randomInt) < manpadThreat) then {
+	if(([0, 100] call BIS_fnc_randomInt) < LND_manpadThreat) then {
 		_p = [_whitelist, _blacklist] call BIS_fnc_randomPos;
 		_p = [
 			_p,						// centre
@@ -93,7 +93,7 @@ for "_i" from 0 to ([0, 2] call BIS_fnc_randomInt) do {
 			_aa_group = [_p, east, selectRandom LND_opforManpads] call BIS_fnc_spawnGroup;
 			_aa_group setFormation "DIAMOND";
 
-			if(intel >= 2) then {
+			if(LND_intel >= 2) then {
 				private _radius = switch (intel) do {
 					case 2: { 200 };
 					case 3: { 100 };
@@ -122,9 +122,9 @@ for "_i" from 0 to ([0, 2] call BIS_fnc_randomInt) do {
 _whitelist = [];
 _whitelist append _aaCorridors;
 _whitelist pushBack [_position, 3000];
-_blacklist = ["water", safeZone, [_position, 1000]];
+_blacklist = ["water", LND_safeZone, [_position, 1000]];
 _blacklist append ([2000] call LND_fnc_getPlayerPositions);
-if(([0, 100] call BIS_fnc_randomInt) < aaaThreat) then {
+if(([0, 100] call BIS_fnc_randomInt) < LND_aaaThreat) then {
 	_p = [_whitelist, _blacklist] call BIS_fnc_randomPos;
 	_p = [
 		_p,						// centre
@@ -139,7 +139,7 @@ if(([0, 100] call BIS_fnc_randomInt) < aaaThreat) then {
 	if (not (_p isEqualTo [0, 0])) then {
 		_aaa_vic = [_p, random 360, selectRandom LND_opforAAA, east] call BIS_fnc_spawnVehicle;
 
-		if(intel >= 2) then {
+		if(LND_intel >= 2) then {
 			private _radius = switch (intel) do {
 				case 2: { 200 };
 				case 3: { 100 };

@@ -4,7 +4,7 @@ scriptName "LND\functions\TaskFramework\fn_taskIntel.sqf";
 		Landric
 
 	Description:
-		Generates an intel briefing (based on global intel level) for the current task
+		Generates an intel briefing (based on global LND_intel level) for the current task
 		Intel levels are:
 		0 (None) 		- Grid coordinates only, no task marker
 		1 (Sparse)		- Grid coordinates, task marker, mission type
@@ -98,7 +98,7 @@ _intelStrings pushback (
 
 _intelStrings pushBack format ["Requesting CAS at grid %1.", mapGridPosition _position];
 
-if (intel == 0) exitWith {
+if (LND_intel == 0) exitWith {
 	_intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + (selectRandom [" Out.", " Out to you."])];
 	[_intelStrings, _caller] call LND_fnc_displayIntel;
 	_intelStrings
@@ -132,7 +132,7 @@ if(not isNull LND_smoke) then {
 
 	private "_color";
 	private "_secondary";
-	// TODO: Account for any other colours of LND_smoke
+	// TODO: Account for any other colours of smoke
 
 	switch(_LND_smoke) do {
 		case "LND_smokeShellBlue_Infinite": {

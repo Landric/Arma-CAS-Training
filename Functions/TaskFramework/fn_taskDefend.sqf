@@ -33,7 +33,7 @@ LND_fnc_generateIntel = {
 	];
 	_intelString = _intelString +  " ";
 	// Show direction only
-	if(intel < 2) then {
+	if(LND_intel < 2) then {
 		_intelString = _intelString +  selectRandom [
 			format ["Hostiles closing in from the %1, say again our %2.", _direction, toUpper _direction]
 		];
@@ -78,7 +78,7 @@ LND_fnc_generateIntel = {
 
 params ["_position"];
 
-if(intel >= 4) then { systemChat "Task type: Defend" ; };
+if(LND_intel >= 4) then { systemChat "Task type: Defend" ; };
 
 // TODO: Parameterise BLUFOR faction
 _blufor_group = [_position, west, (selectRandom LND_bluforInfantry)] call BIS_fnc_spawnGroup;
@@ -122,9 +122,9 @@ if (([0, 100] call BIS_fnc_randomInt) < LND_smokeChance) then {
 };
 
 
-private _taskIcon = if(intel > 0) then {"defend"} else{""};
-private _taskTitle = if(intel > 0) then { "Support Friendly Forces" } else { "Close Air Support" };
-private _taskDest = if(intel >= 2) then {[leader _blufor_group, true]} else{objNull};
+private _taskIcon = if(LND_intel > 0) then {"defend"} else{""};
+private _taskTitle = if(LND_intel > 0) then { "Support Friendly Forces" } else { "Close Air Support" };
+private _taskDest = if(LND_intel >= 2) then {[leader _blufor_group, true]} else{objNull};
 
 _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position], _taskDest, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
@@ -163,7 +163,7 @@ while { _loop } do {
 			_loop = false;
 	}
 	catch {
-		if(intel >= 4) then { systemChat str _exception; };
+		if(LND_intel >= 4) then { systemChat str _exception; };
 
 		{ if(side _x == east) then {deleteVehicle _x }; } forEach allUnits;
 		{ deleteVehicle _x } forEach allDead;
@@ -174,4 +174,4 @@ while { _loop } do {
 	};
 }; //while
 
-if(intel >= 1) then { [_distance, _direction] call LND_fnc_generateIntel; };
+if(LND_intel >= 1) then { [_distance, _direction] call LND_fnc_generateIntel; };

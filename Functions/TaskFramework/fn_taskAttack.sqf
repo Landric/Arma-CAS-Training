@@ -24,14 +24,14 @@ scriptName "LND\functions\TaskFramework\fn_taskAttack.sqf";
 
 LND_fnc_generateIntel = {
 	
-	private _intel = "Concentration of enemy troops spotted. Engage and destroy.";
+	private _intelString = "Concentration of enemy troops spotted. Engage and destroy.";
 
 
 	private _desc = format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription;
 	[
 		format ["tsk%1", LND_taskCounter],
 		[
-			_intel,
+			_intelString,
 			_desc select 1,
 			_desc select 2
 		]
@@ -43,10 +43,10 @@ LND_fnc_generateIntel = {
 
 params ["_position"];
 
-if(intel >= 4) then { systemChat "Task type: Attack" ; };
+if(LND_intel >= 4) then { systemChat "Task type: Attack" ; };
 
-private _taskIcon = if(intel > 0) then { "attack" } else { "" };
-private _taskTitle = if(intel > 0) then { "Strike Hostile Forces" } else { "Close Air Support" };
+private _taskIcon = if(LND_intel > 0) then { "attack" } else { "" };
+private _taskTitle = if(LND_intel > 0) then { "Strike Hostile Forces" } else { "Close Air Support" };
 _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
 if (([0, 100] call BIS_fnc_randomInt) < LND_smokeChance) then {	
@@ -69,7 +69,7 @@ _vehicles = [selectRandom LND_opforVehiclesLight, selectRandom LND_opforVehicles
 	["PAT", _position, 250]
 ] call LND_fnc_spawnOpfor;
 
-if(intel >= 1) then {
+if(LND_intel >= 1) then {
 	[format ["tsk%1", LND_taskCounter], _position] call BIS_fnc_taskSetDestination;
 	call LND_fnc_generateIntel;
 };

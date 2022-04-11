@@ -26,7 +26,7 @@ LND_fnc_generateIntel = {
 
 	private _convoyWaypoints = waypoints (group (LND_opforPriorityTargets select 0));
 	
-	private _intel = format ["Enemy convoy moving through the area. Final destination believed to be in the vicinity of grid %1. Engage and destroy.",
+	private _intelString = format ["Enemy convoy moving through the area. Final destination believed to be in the vicinity of grid %1. Engage and destroy.",
 		mapGridPosition (getWPPos (_convoyWaypoints select ((count _convoyWaypoints)-1)))
 	];
 
@@ -34,7 +34,7 @@ LND_fnc_generateIntel = {
 	[
 		format ["tsk%1", LND_taskCounter],
 		[
-			_intel,
+			_intelString,
 			_desc select 1,
 			_desc select 2
 		]
@@ -43,10 +43,10 @@ LND_fnc_generateIntel = {
 
 params ["_position"];
 
-if(intel >= 4) then { systemChat "Task type: Convoy" ; };
+if(LND_intel >= 4) then { systemChat "Task type: Convoy" ; };
 
-private _taskIcon = if(intel > 0) then { "destroy" } else { "" };
-private _taskTitle = if(intel > 0) then { "Destroy Hostile Convoy" } else { "Close Air Support" };
+private _taskIcon = if(LND_intel > 0) then { "destroy" } else { "" };
+private _taskTitle = if(LND_intel > 0) then { "Destroy Hostile Convoy" } else { "Close Air Support" };
 _task = [true, format ["tsk%1", LND_taskCounter], ["", _taskTitle, _position],  objNull, true, -1, true, _taskIcon] call BIS_fnc_taskCreate;
 
 private _vehicles = [selectRandom LND_opforVehiclesHeavy];
@@ -90,7 +90,7 @@ _convoyStartPos = getPos ([_position, 20000] call BIS_fnc_nearestRoad);
 ] call LND_fnc_spawnOpfor;
 
 
-if(intel >= 1) then {
+if(LND_intel >= 1) then {
 	[format ["tsk%1", LND_taskCounter], [LND_opforPriorityTargets select 0], true] call BIS_fnc_taskSetDestination;
 	call LND_fnc_generateIntel;
 };

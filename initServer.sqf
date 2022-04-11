@@ -1,11 +1,11 @@
 
 LND_smokeChance = ["LND_smoke", 60] call BIS_fnc_getParamValue;
-intel = ["Intel", 2] call BIS_fnc_getParamValue;
-manpadThreat = ["MANPAD", 10] call BIS_fnc_getParamValue;
-aaaThreat = ["AAA", 0] call BIS_fnc_getParamValue;
-completionPercent = ["Completion", 80] call BIS_fnc_getParamValue;
+LND_intel = ["Intel", 2] call BIS_fnc_getParamValue;
+LND_manpadThreat = ["MANPAD", 10] call BIS_fnc_getParamValue;
+LND_aaaThreat = ["AAA", 0] call BIS_fnc_getParamValue;
+LND_completionPercent = ["Completion", 80] call BIS_fnc_getParamValue;
 
-safeZone = [getMarkerPos "respawn_start", 1500];
+LND_safeZone = [getMarkerPos "respawn_start", 1500];
 LND_playerCallsign = selectRandom ["Hornet", "Banshee", "Shriek", "Thunderfoot", "Hammer", "Big-Bird", "Alchemist"];
 
 
@@ -41,7 +41,7 @@ LND_opforPriorityTargets = [];
 LND_totalTargets = 0;
 
 
-if(intel == 4) then {
+if(LND_intel == 4) then {
 	[] spawn {
 		while{true} do{
 			sleep 0.5;
