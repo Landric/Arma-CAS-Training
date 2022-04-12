@@ -4,41 +4,42 @@ scriptName "LND\functions\TaskFramework\fn_taskIntel.sqf";
 		Landric
 
 	Description:
-		Generates an intel briefing (based on global LND_intel level) for the current task
+		Generates an intel briefing (based on global LND_intel level) for the current task, displays it in sideChat, and sets the current task's description
+
 		Intel levels are:
 		0 (None) 		- Grid coordinates only, no task marker
 		1 (Sparse)		- Grid coordinates, task marker, mission type
 		2 (Moderate)	- As above, plus opfor composition/strength, approximate markers on AA positions
 		3 (Maximal)		- As above, plus sub tasks/map markers on groups, accurate markers on AA positions
-		4 (Debug)		- All of the above, plus precise opfor composition and strength, and real-time map markers for every unit
+		4 (Debug)		- All of the above, plus real-time map markers for every unit, and additional debug information printed to systemChat
+
+		// TODO: If composition is tied to difficulty, there's no (real) benefit to including it
 
 	Parameter(s):
-		_this: parameters
+		Required:
+			- _position - position of the task, used to generate grid coordinates
+		Optional:
+			- _caller 	- the desired "caller" on the radio; can be a group, or a string (e.g. "HQ", "BLU", etc.)
 
-			- required:
-				-
+	Returns:
+		None
 
-			- optional:
-				-
-
-	Example:
-		
-
-	Returns:		
+	Example Usage:
+		[getMarkerPos "marker_task", "HQ"] call LND_fnc_taskIntel;	
 */
 
 
 LND_fnc_displayIntel = {
-	params ["_intelStrings"];
-	private _caller = param [1, [west, "HQ"]];
+	params ["_intelString"];
+	private _caller = param [1, "HQ"];
 
-	{ _caller sideChat _x } forEach _intelStrings;
+	{ _caller sideChat _x } forEach (_intelString splitString (toString [13,10]));
 
 	_desc = format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription;
 	[
 		format ["tsk%1", LND_taskCounter],
 		[
-			format ['"%1"', _intelStrings joinString "<br/>"],
+			format ['"%1"', ((_intelString splitString (toString [13,10])) joinString "<br/>")],
 			_desc select 1,
 			_desc select 2
 		]
@@ -49,8 +50,6 @@ LND_fnc_displayIntel = {
 
 
 params ["_position", "_caller"];
-
-private _mission = param [2, ""];
 
 private _intelStrings = [];
 
@@ -76,46 +75,51 @@ if(isMultiplayer) then {
 	_calleeName = format ["%1-Wing", LND_playerCallsign];
 }
 else {
-	_calleeName = format ["%1 1-1", LND_playerCallsign]; // group player call LND_fnc_groupName;
+	_calleeName = format ["%1 1-1", LND_playerCallsign];
 };
 
 
-_intelStrings pushback (
-	(selectRandom [
-		format ["%1, this is %2,", _calleeName, _callerName],
-		format ["Hello %1, hello %1, this is %2,", _calleeName, _callerName],
-		format ["Hello %1,", _calleeName],
-		format ["%1, %2,", _calleeName, _callerName]
-	]) +
-	(selectRandom [
+
+_intelGrammar = createHashMapFromArray [
+	["origin", format ["#greeting#,#intro# over.%1#request.capitalise# #out#.", endl]],
+
+	["greeting", [
+		format ["%1, this is %2", _calleeName, _callerName],
+		format ["Hello %1, hello %1, this is %2", _calleeName, _callerName],
+		format ["Hello %1", _calleeName],
+		format ["%1, %2", _calleeName, _callerName]
+	]],
+	["intro", [
 		"",
 		" tasking for you,",
-		" CAS mission for you,",
+		" #CAS# mission for you,",
 		" priority tasking for you,"
-	]) +
-	" over."
-);
+	]],
+	["request", [
+		format ["Requesting #CAS# at grid %1", mapGridPosition _position],
+		format ["#CAS# #required# at grid %1", mapGridPosition _position]
+	]],
+	["CAS", ["CAS", "close air support"]],
+	["required", ["required", "requested", "needed", "wanted"]],
 
-_intelStrings pushBack format ["Requesting CAS at grid %1.", mapGridPosition _position];
+	["out", [
+		"Out",
+		"Out to you"
+	]]
+];
 
 if (LND_intel == 0) exitWith {
-	_intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + (selectRandom [" Out.", " Out to you."])];
-	[_intelStrings, _caller] call LND_fnc_displayIntel;
-	_intelStrings
+	_intelString = [_intelGrammar] call LND_fnc_parseGrammar;
+	[_intelString, _caller] call LND_fnc_displayIntel;
+	_intelString
 };
 
+_intelGrammar set ["origin", format ["#greeting#,#intro# over.%1#request.capitalise#. #mission.capitalise#. #smoke##out#.", endl]];
 
-// Incorporate any task-specific information (that has previously been pushed to the task description)
-// as part of the intel package
-_desc = (format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription) select 0 select 0; // Not sure why this requires two "select 0"s?!
-if(_desc isNotEqualTo "") then {
-	_intelStrings pushback _desc;
-};
+// Incorporate any task-specific information (that has previously been pushed to the task description) as part of the intel package
+_intelGrammar set ["mission", (format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription) select 0 select 0]; // Not sure why this requires two "select 0"s?!
 
-
-
-// TODO: This is probably massively over-complicated for very little benefit - might as well just pass in the required line
-// tbh this whole function is massively over-complicated for very little benefit....
+private _smokeString = "";
 if(not isNull LND_smoke) then {
 
 	private "_smoke";
@@ -149,16 +153,16 @@ if(not isNull LND_smoke) then {
 		};
 	};
 
-	_intelStrings pushback (selectRandom [
-		format ["%1 positions marked with %2 - say again, %3 positions marked with %4.", _friendOrFoe, _color, toUpper _friendOrFoe, _secondary],
-		format ["Popping %1 on %2 positions.", _color, toLower _friendOrFoe]
-	]);
+	_smokeString = selectRandom [
+		format ["%1 positions marked with %2 - say again, %3 positions marked with %4. ", _friendOrFoe, _color, toUpper _friendOrFoe, _secondary],
+		format ["Popping %1 on %2 positions. ", _color, toLower _friendOrFoe]
+	];
 };
 
-_intelStrings set [(count _intelStrings)-1, (_intelStrings select ((count _intelStrings)-1)) + (selectRandom [" Out.", " Out to you."])];
+_intelGrammar set ["smoke", _smokeString];
 
+_intelString = [_intelGrammar] call LND_fnc_parseGrammar;
 
-[_intelStrings, _caller] call LND_fnc_displayIntel;
+[_intelString, _caller] call LND_fnc_displayIntel;
 
-
-_intelStrings
+_intelString

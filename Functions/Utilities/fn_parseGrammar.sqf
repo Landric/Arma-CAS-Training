@@ -89,9 +89,8 @@ LND_fnc_replaceKeys = {
 
 		_v = _grammar get _key;
 
-		if(isNil "_v") exitWith {
-			diag_log format ["Key not found: %1", _key];
-			_string
+		if(isNil "_v") then {
+			continue;
 		};
 
 		if(typeName _v isEqualTo "ARRAY") then {

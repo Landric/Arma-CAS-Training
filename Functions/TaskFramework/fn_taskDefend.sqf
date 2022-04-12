@@ -20,46 +20,71 @@ LND_fnc_generateIntel = {
 
 	params ["_distance", "_direction"];
 
-	private _intelString = "";
-	_intelString = _intelString +  selectRandom [
-		"We need immediate air support!",
-		"In need of urgent CAS!"
-	];
-	_intelString = _intelString +  " ";
 	// Show direction only
+	private "_location";
+	private _composition = "#hostile forces#";
+	private _danger = "";
 	if(LND_intel < 2) then {
-		_intelString = _intelString +  selectRandom [
-			format ["Hostiles closing in from the %1, say again our %2.", _direction, toUpper _direction]
-		];
+		_location = format ["#approaching# from the %1, say again our %2", _direction, toUpper _direction];
 	}
 	// Show direction, distance, and composition
 	else {
-		_intelString = _intelString +  selectRandom [
-			format ["Enemy forces are approximately %1m to our %2.", _distance, _direction]
-		];
-
-		if(count LND_opforPriorityTargets > 0) then {
-			_intelString = _intelString +  selectRandom [
-				"Enemy infantry supported by vehicles closing on our position!"
-			];
-		}
-		else {
-			_intelString = _intelString +  selectRandom [
-				"Large concentration of enemy infantry."
-			];
+		if(LND_intel >= 1) then {
+			switch(LND_defendDifficulty) do {
+				// Disabled
+				case 0: { throw "Defend tasks are disabled - why are we generating one?!"; };
+				// Easy - infantry and medium location
+				case 1: { _composition = "#hostile# infantry" };
+				// Medium - infantry and potentially danger close
+				case 2: { _composition = "large volume of #hostile# infantry" };
+				// Hard - more infantry and light vehicle
+				case 3: { _composition = "large volume of #hostile# infantry supported by vehicle"; };
+				// Extreme - large volume of infantry and up to medium vehicle
+				case 4: { _composition = "extreme volume of #hostile# infantry with vehicle support"; };
+				// Unknown
+				default { throw format ["Unexpected Defend task difficulty: %1", LND_defendDifficulty]; };
+			};
 		};
+
+		_location= format ["are approximately %1m to our %2", _distance, _direction];
 	};
 
 	if(_distance <= 500) then {
-		_intelString = _intelString +  " Danger close!";
+		_danger = ", danger close";
 	};
 
+
+	private _intelGrammar = createHashMapFromArray [
+		["origin", "#request#! #composition.capitalise# #location##danger#"],
+		
+		["request", [
+			"we need immediate air support",
+			"in need of urgent CAS",
+			"we are under attack from #hostile forces#",
+			"we're close to being overwhelmed"
+		]],
+		["location", _location],
+		["composition", _composition],
+		["hostile forces", [
+			"#hostile# forces",
+			"#hostile.s#"
+		]],
+		["hostile", [
+			"hostile",
+			"enemy"
+		]],
+		["approaching", [
+			"approaching",
+			"closing in"
+		]],
+		["danger", _danger]
+	];
 
 	private _desc = format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription;
 	[
 		format ["tsk%1", LND_taskCounter],
 		[
-			_intelString,
+			[_intelGrammar] call LND_fnc_parseGrammar,
 			_desc select 1,
 			_desc select 2
 		]
@@ -133,24 +158,34 @@ private _vehicles = [];
 switch(LND_defendDifficulty) do {
 
 	case 0: { throw "Defend tasks are disabled - why are we generating one?!"; };
-
+	// Easy - infantry and medium location
 	case 1: {
 		_distance =	selectRandom [600, 800];
 		for "_i" from 0 to (_distance/100)-3 do { _units pushBack selectRandom LND_opforInfantry; };
 	};
+	// Medium - infantry and potentially danger close
 	case 2: {
 		_distance =	selectRandom [400, 600, 800, 1000];
 		for "_i" from 0 to (_distance/100)-2 do { _units pushBack selectRandom LND_opforInfantry; };
 	};
+	// Hard - more infantry and light vehicle
 	case 3: {
 		_distance =	selectRandom [400, 600, 800, 1000];
 		for "_i" from 0 to (_distance/100)-1 do { _units pushBack selectRandom LND_opforInfantry; };
 		_vehicles pushBack selectRandom LND_opforVehiclesLight;
 	};
+	// Extreme - large volume of infantry and up to medium vehicle
 	case 4: {
 		_distance =	selectRandom [400, 600, 800, 1000, 1200];
 		for "_i" from 0 to (_distance/100)+3 do { _units pushBack selectRandom LND_opforInfantry; };
-		_vehicles pushBack selectRandom LND_opforVehiclesMedium;
+		
+		if([0, 1] call BIS_fnc_randomInt == 0) then {
+			_vehicles pushBack selectRandom LND_opforVehiclesLight;
+			_vehicles pushBack selectRandom LND_opforVehiclesLight;
+		}
+		else{
+			_vehicles pushBack selectRandom LND_opforVehiclesMedium;
+		};
 		[_position] call LND_fnc_spawnBlufor;
 	};
 	default { throw format ["Unexpected Defend task difficulty: %1", LND_defendDifficulty]; };
@@ -207,6 +242,7 @@ while { _loop } do {
 			LND_smoke attachTo [LND_bluforUnits select 0];
 		};
 	};
+	// TODO: Add a counter to the loop that causes a loud failure after a certain number of iterations
 }; //while
 
 if(LND_intel >= 1) then { [_distance, _direction] call LND_fnc_generateIntel; };
