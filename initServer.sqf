@@ -46,8 +46,7 @@ if(LND_intel == 4) then {
 		while{true} do{
 			sleep 0.5;
 			{
-				private "_a";
-				_a = toArray _x;
+				private _a = toArray _x;
 				_a resize 11;
 				if (toString _a == "marker_unit") then {
 					deleteMarker _x;
@@ -76,8 +75,6 @@ if(LND_intel == 4) then {
 		};
 	};
 };
-
-
 
 call LND_fnc_loadFactions;
 

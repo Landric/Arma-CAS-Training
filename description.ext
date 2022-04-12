@@ -31,6 +31,7 @@ class CfgFunctions
 			class getPlayerPositions {};
 			class doPatrol {};
 			class doConvoy {};
+			class parseGrammar {};
 		};
 	};
 };
