@@ -17,7 +17,7 @@ if( ["_playerDamage", 1] call BIS_fnc_getParamValue == 0) then {
 };
 
 if( ["_playerDamage", 1] call BIS_fnc_getParamValue == 1) then {
-	_player addeventhandler ["handledamage",{ (_this select 2) / 6}];
+	_player addeventhandler ["handledamage",{ (_this select 2) / 6 }];
 };
 
 
