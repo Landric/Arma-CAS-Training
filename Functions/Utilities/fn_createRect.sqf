@@ -23,7 +23,7 @@ scriptName "LND\functions\Utilities\fn_createRect.sqf";
 
 
 params ["_start", "_end"];
-_width = param [2, 1000]
+_width = param [2, 1000];
 
 // Calculate line
 _dist = sqrt(((_end select 0)-(_start select 0))^2+((_end select 1)-(_start select 1))^2) * 0.5;
