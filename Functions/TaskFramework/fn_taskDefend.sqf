@@ -4,22 +4,16 @@ scriptName "LND\functions\TaskFramework\fn_taskDefend.sqf";
 		Landric
 
 	Description:
-		Creates a task suitable for CAS
+		Creates a Close Air Support task to support friendly units under attack from enemy infantry/vehicles (dependant on difficultly defined in LND_defendDifficulty)
 
 	Parameter(s):
-		_this: parameters
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		
-
+		None
+	
 	Returns:
-		
+		None
+
+	Example Usage:
+		call LND_fnc_taskDefend;
 */
 
 LND_fnc_generateIntel = {

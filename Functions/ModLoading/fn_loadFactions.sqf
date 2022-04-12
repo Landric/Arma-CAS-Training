@@ -7,19 +7,13 @@ scriptName "LND\functions\LoadMods\fn_loadFactions.sqf";
 		Initialises types of unit (e.g. Infantry, AA, Vehicles) as a faction provided in description.ext
 
 	Parameter(s):
-		_this: parameters (array of array [key (string), value (any)])
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		call LND_fnc_loadFactions;
-
+		None
+	
 	Returns:
+		None
 
+	Example Usage:
+		call LND_fnc_loadFactions;
 */
 
 try {

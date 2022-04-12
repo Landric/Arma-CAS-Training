@@ -4,25 +4,30 @@ scriptName "LND\functions\TaskFramework\fn_spawnOpfor.sqf";
 		Landric
 
 	Description:
-		Creates a task suitable for CAS
+		Spawns a provided set of OPFOR units around a particular position, and optionally provides them a (custom) (set of) waypoint(s)
 
 	Parameter(s):
-		_this: parameters
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		
-
+		Required:
+			_groups		- array of infantry group configs
+			_vehicles	- array of vehicle classnames
+			_whitelist	- array of allowed areas e.g. [center, radius] or [center, [a, b, angle, rect]]
+			_blacklist	- array of disallowed areas
+		Optional:
+			_waypoint 	- array of [waypoint type, location, radius]; type can also include "PAT" (for patrols) or "CON" (for convoys)
+			_spawnOnRoad- bool indicating whether vehicles should only be spawned on roads
+	
 	Returns:
-		
+		None
+
+	Example Usage:
+		[
+			[(configfile >> "CfgGroups" >> "East" >> "OPF_F" >> "Infantry" >> "OIA_InfAssault")],
+			["O_LSV_02_armed_F", "O_LSV_02_armed_F"],
+			[[getMarkerPos "marker_opfor", 200]],
+			[[getPos player, 200]],
+			["PAT", getMarkerPos "marker_opfor", 250]
+		] call LND_fnc_spawnOpfor;
 */
-
-
 
 params ["_groups", "_vehicles", "_whitelist", "_blacklist"];
 private _waypoint = param [4, []]; // Expected [type, location, radius]

@@ -4,28 +4,34 @@ scriptName "LND\functions\TaskFramework\fn_taskAttack.sqf";
 		Landric
 
 	Description:
-		Creates a task suitable for CAS
+		Creates a Close Air Support task to destroy a concentration of infantry/vehicles (dependant on difficultly defined in LND_attackDifficulty)
 
 	Parameter(s):
-		_this: parameters
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		
-
+		None
+	
 	Returns:
-		
+		None
+
+	Example Usage:
+		call LND_fnc_taskAttack;
 */
 
 LND_fnc_generateIntel = {
 	
-	private _intelString = "Concentration of enemy troops spotted. Engage and destroy.";
-
+	private _intelString = 	switch(LND_attackDifficulty) do {
+		// Disabled
+		case 0: { throw "Attack tasks are disabled - why are we generating one?!"; };
+		// Easy - infantry only
+		case 1: { "Concentration of enemy infantry spotted. Engage and destroy." };
+		// Medium - infantry and (up to) a pair of light vehicles
+		case 2: { "Enemy troops and light vehicles reported in the AO. Engage and destroy." };
+		// Hard - more infantry, supported by a medium or (rarely) heavy vehicle 
+		case 3: { "Large concentration of enemy troops, supported by IFVs. Engage and destroy."; };
+		// Extreme - even more infantry, supported by a pair of medium vehicles or a heavy vehicle or (if not disabled) triple-A
+		case 4: { "Heavy concentration of enemy forces reported. Be advised, possible heavy armour in the AO."; };
+		// Unknown
+		default { throw format ["Unexpected Attack task difficulty: %1", LND_attackDifficulty]; };
+	};
 
 	private _desc = format ["tsk%1", LND_taskCounter] call BIS_fnc_taskDescription;
 	[

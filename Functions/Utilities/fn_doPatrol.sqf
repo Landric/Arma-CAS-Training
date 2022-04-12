@@ -7,18 +7,18 @@ scriptName "LND\functions\Utilities\fn_doPatrol.sqf";
 		Tasks a group with patrolling an area, in SAFE stance
 
 	Parameter(s):
-		_this: parameters
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-
+		Required:
+			_group 		- the group to be sent on patrol
+		Optional:
+			_position 	- the position to centre the patrol around (default: group leader's position)
+			_radius 	- the distance allowed to travel from _position (default: 150)
+			_waypoints 	- the number of waypoints to generate (default: 5)
 
 	Returns:
+		None
+
+	Example Usage:
+		[_myGroup] call LND_fnc_doPatrol;	
 */
 
 params ["_group"];

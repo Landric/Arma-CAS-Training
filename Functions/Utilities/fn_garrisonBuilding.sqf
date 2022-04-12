@@ -4,28 +4,26 @@ scriptName "LND\functions\Utilities\fn_garrisonBuilding.sqf";
 		Landric
 
 	Description:
-		Garrisons a given building, with a given selection of units
+		Creates a provided set of units, and garrisons a given building
 
 	Parameter(s):
-		_this: parameters [location, side, array]
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		[] call LND_fnc_garrisonBuilding;
+		Required:
+			_building	- the building to garrison
+			_units 		- array of units
+		Optional:
+			_side 		- the side to create the units on
 
 	Returns:
+		None
 
+	Example Usage:
+		Not yet implemented
 */
 
 params ["_building", "_units"];
-
 private _side = param [2, east];
 
+throw "Not yet implemented";
 
 private _positions = _building buildingPos -1;
 

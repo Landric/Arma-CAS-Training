@@ -8,23 +8,22 @@ scriptName "LND\functions\Utilities\fn_createRect.sqf";
 		Code inspired by rübe - https://forums.bohemia.net/forums/topic/145174-arma-3-drawline-command-finding-a-method-to-the-madness/
 
 	Parameter(s):
-		_this: parameters (start, end, width)
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		[getPos player, getmarkerPos "marker_location", 100] call LND_fnc_createRect;
+		Required:
+			_start 	- start position
+			_end 	- end position
+		Optional:
+			_width 	- width of the line (default: 1000)
 
 	Returns:
-		[_centre, [_width, _dist, _angle, true]]
+		Rectangle of [_centre, [_width, _dist, _angle, true]]
+
+	Example Usage:
+		[getPos player, getmarkerPos "marker_location", 100] call LND_fnc_createRect;
 */
 
 
-params ["_start", "_end", "_width"];
+params ["_start", "_end"];
+_width = param [2, 1000]
 
 // Calculate line
 _dist = sqrt(((_end select 0)-(_start select 0))^2+((_end select 1)-(_start select 1))^2) * 0.5;

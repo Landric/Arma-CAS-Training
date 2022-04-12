@@ -8,19 +8,15 @@ scriptName "LND\functions\Utilities\fn_getPlayerPositions.sqf";
 		(Useful for creating white/blacklists for BIS_fnc_randomPos)
 
 	Parameter(s):
-		_this: parameters
+		Optional:
+			_radius	- a radius to be appended to each position (for generating position white/blacklists)
 
-			- required:
-				-
+	Returns:
+		Array of positions, or array of [position, radius] pairs
 
-			- optional:
-				-
-
-	Example:
+	Example Usage:
 		[] call LND_fnc_getPlayerPositions; // Returns [[0, 0], [10, 10], [20, 20]]
-		[100] call LND_fnc_getPlayerPositions; // Returns [[[0, 0], 100], [[10, 10], 100], [[20, 20], 100]]
-
-	Returns:		
+		[100] call LND_fnc_getPlayerPositions; // Returns [[[0, 0], 100], [[10, 10], 100], [[20, 20], 100]]		
 */
 
 private _radius = param [0, -1];

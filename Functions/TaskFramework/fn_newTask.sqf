@@ -4,22 +4,16 @@ scriptName "LND\functions\TaskFramework\fn_newTask.sqf";
 		Landric
 
 	Description:
-		Creates a task suitable for CAS
+		Creates a suitable Close Air Support task, based on the allowed list of functions in LND_taskTypes
 
 	Parameter(s):
-		_this: parameters
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		
-
+		None
+	
 	Returns:
-		
+		None
+
+	Example Usage:
+		call LND_fnc_newTask;
 */
 
 if(!isServer) exitWith { }; // TODO: Probably not needed ?Does it hinder?
@@ -62,7 +56,7 @@ LND_totalTargets = count LND_opforTargets;
 // Spawn AA around the AO, and between the player and the zone
 private _aaCorridors = [];
 {
-	_aaCorridors pushBack [_x, _position, 1000] call LND_fnc_createRect;
+	_aaCorridors pushBack [_x, _position] call LND_fnc_createRect;
 } forEach [] call LND_fnc_getPlayerPositions;
 
 

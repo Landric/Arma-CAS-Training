@@ -7,19 +7,13 @@ scriptName "LND\functions\LoadMods\fn_loadVehicles.sqf";
 		Loads a predefined list of vehicles from compatible mods if they are loaded, and spawns them at predefined markers
 
 	Parameter(s):
-		_this: parameters (array of array [key (string), value (any)])
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		call LND_fnc_loadVehicles;
-
+		None
+	
 	Returns:
+		None
 
+	Example Usage:
+		call LND_fnc_loadVehicles;
 */
 
 _helo_locations = [];

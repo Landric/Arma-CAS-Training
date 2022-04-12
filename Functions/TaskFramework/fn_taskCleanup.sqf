@@ -4,22 +4,16 @@ scriptName "LND\functions\TaskFramework\fn_taskCleanup.sqf";
 		Landric
 
 	Description:
-		Creates a task suitable for CAS
+		Completes the current task, cleans up any remaining units/wrecks/markers, and calls LND_fnc_newTask
 
 	Parameter(s):
-		_this: parameters
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		
-
+		_state 	- state the current task should be completed with, i.e. "SUCCEEDED"/"FAILED"
+	
 	Returns:
-		
+		None
+
+	Example Usage:
+		["SUCCEEDED"] call LND_fnc_taskCleanup;
 */
 
 params ["_state"];

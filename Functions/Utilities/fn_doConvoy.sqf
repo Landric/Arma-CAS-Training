@@ -4,7 +4,19 @@ scriptName "LND\functions\Utilities\fn_doConvoy.sqf";
 		Landric
 
 	Description:
-		Tasks an array of (ungrouped) vehicles to form a convoy with a random destination
+		Tasks an array of vehicles, groups them together, and attempts to force them along the closest road
+		NOTE: This is an extremely naive implementation, and is suitable for CAS strikes, but probably not much else
+
+	Parameter(s):
+		_vehicles 	- array of vehicles
+
+	Returns:
+		None
+
+	Example Usage:
+		_v1 = [getMarkerPos "marker_v1", 100, "O_Truck_03_fuel_F", east] call BIS_fnc_spawnVehicle select 0;
+		_v1 = [getMarkerPos "marker_v2", 100, "O_Truck_02_Ammo_F", east] call BIS_fnc_spawnVehicle select 0;
+		[_v1, _v2] call LND_fnc_doConvoy;
 */
 
 params ["_vehicles"];

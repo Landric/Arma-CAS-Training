@@ -4,25 +4,16 @@ scriptName "LND\functions\Utilities\fn_groupName.sqf";
 		Landric
 
 	Description:
-		Returns a group's name, truncating the side information
+		Returns the human-readable name (i.e. trims the first two characters) of a given group
 
 	Parameter(s):
-		_this: parameters [group]
-
-			- required:
-				-
-
-			- optional:
-				-
-
-	Example:
-		[group player] call LND_fnc_groupName;
+		_group - the group
 
 	Returns:
-		String - group name
+		string - name of the passed group
+
+	Example Usage:
+		[group player] call LND_fnc_groupName; // Returns "Alpha 1-1"
 */
-
-
 params ["_group"];
-
 [format ["%1", _group], 2] call BIS_fnc_trimString
