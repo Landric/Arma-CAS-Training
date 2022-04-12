@@ -1,6 +1,6 @@
 author			= "Landric";
 onLoadName		= "Landric's CAS Training";
-onLoadMission	= "Complete an infinite amount of missions in order to hone your skills in a variety of aircraft.";
+onLoadMission	= "Hone your skills in a wide variety of aircraft by completing an endless number of close-air-support tasks.";
 
 
 class CfgFunctions

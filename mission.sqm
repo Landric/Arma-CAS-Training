@@ -20,10 +20,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={15144.877,36.363438,16881.902};
-		dir[]={0.8208214,-0.53308868,-0.20510659};
-		up[]={0.51718664,0.84605938,-0.12923442};
-		aside[]={-0.24242575,7.4505806e-009,-0.97017002};
+		pos[]={15142.468,68.662125,16853.508};
+		dir[]={-0.21886934,-0.56711751,0.79402387};
+		up[]={-0.15070312,0.82363695,0.54672742};
+		aside[]={0.96404612,7.4505806e-009,0.26573527};
 	};
 };
 binarizationWanted=0;
@@ -166,7 +166,8 @@ randomSeed=1085861;
 class ScenarioData
 {
 	author="Landric";
-	overviewText="Complete an infinite amount of missions in order to hone your skills in a variety of aircraft";
+	overviewText="Hone your skills in a wide variety of aircraft by completing an endless number of close-air-support tasks.";
+	onLoadMission="Hone your skills in a wide variety of aircraft by completing an endless number of close-air-support tasks.";
 	disabledAI=1;
 	respawn=3;
 	class Header
@@ -206,8 +207,8 @@ class Mission
 {
 	class Intel
 	{
-		briefingName="CAS Training";
-		overviewText="Complete an infinite amount of missions in order to hone your skills in a variety of aircraft";
+		briefingName="Landric's CAS Training";
+		overviewText="Hone your skills in a wide variety of aircraft by completing an endless number of close-air-support tasks.";
 		resistanceWest=0;
 		resistanceEast=1;
 		timeOfChanges=1800.0002;
@@ -234,8 +235,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={15157.726,20.290455,16908.662};
-				angles[]={0,3.786998,0};
+				position[]={15159.643,20.290455,16910.232};
+				angles[]={-0,3.786998,0};
 			};
 			side="Empty";
 			flags=4;
@@ -282,8 +283,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={15147.396,20.889915,16931.768};
-				angles[]={0,3.7327666,0};
+				position[]={15150.214,20.889915,16931.459};
+				angles[]={-0,3.7327666,0};
 			};
 			side="Empty";
 			flags=4;
@@ -907,8 +908,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={15138.021,20.332798,16946.639};
-				angles[]={0,3.7524345,0};
+				position[]={15141.496,20.332798,16947.414};
+				angles[]={-0,3.7524345,0};
 			};
 			side="Empty";
 			flags=4;
