@@ -30,6 +30,15 @@ if( ["RespawnOnDemand", 1] call BIS_fnc_getParamValue == 1) then {
 		"Respawn",  
 		{
 			params ["_target", "_caller", "_actionId", "_arguments"];
+			if(vehicle _caller != _caller) then {
+				if(count crew vehicle _caller <= 1) then {
+					[vehicle _caller] spawn {
+					params ["_vehicle"];
+						sleep 2;
+						_vehicle setDamage 1;
+					};
+				};
+			};
 			_caller setDamage 0; 
 			_caller setPos startPos;
 			_caller setDir startDir;
