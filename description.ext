@@ -65,6 +65,16 @@ class Params
 		default = 1;
 	};
 
+	class PlayerVehicleDamage
+	{
+		title = "Damage to player vehicles";
+		texts[] = {"Enabled"};
+		values[] = {2};
+		default = 2;
+
+		// TODO: implement this?
+	};
+
 	class BLUFORFaction
 	{
 		title = "BLUFOR";
