@@ -35,6 +35,7 @@ if( ["RespawnOnDemand", 1] call BIS_fnc_getParamValue == 1) then {
 					[vehicle _caller] spawn {
 					params ["_vehicle"];
 						sleep 2;
+						_vehicle setPos [0,0,0];
 						_vehicle setDamage 1;
 					};
 				};
