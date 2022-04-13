@@ -180,26 +180,28 @@ private _usedRoadSegments = [];
 		[_unit] spawn {
 			params ["_unit"];
 			sleep 3; // Wait a moment to see if the vehicle is disabled
-			if(not canFire _unit and not canMove _unit) then {
+			if(LND_intel >=4) then { systemChat "Checking if disabled...."; };
+			if((not canFire _unit) or (not canMove _unit) or {alive _x} count crew _unit <= 0 ) then {
+				if(LND_intel >=4) then { systemChat "Vehicle disabled!"; };
 				private _t = format ["tsk%1_%2", LND_taskCounter, _unit];
 				if(_t call BIS_fnc_taskExists) then {
 					[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
 				};
+				call LND_fnc_taskSuccessCheck;
 			}
-			call LND_fnc_taskSuccessCheck;
+			else{
+				if(LND_intel >=4) then { systemChat "Vehicle not disabled!"; };
+			};
 		};
 	}];
 
 	_v addEventHandler ["Killed", {
 		params ["_unit", "_killer", "_instigator", "_useEffects"];
 		if(LND_intel >=4) then { systemChat format ["Vehicle %1 KILLED by %2", _unit, _killer]; };
-		private "_t";
-		if(not canFire _unit and not canMove _unit) then {
-			_t = format ["tsk%1_%2", LND_taskCounter, _unit];
-			if(_t call BIS_fnc_taskExists) then {
-				[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
-			};
-		}
+		private	_t = format ["tsk%1_%2", LND_taskCounter, _unit];
+		if(_t call BIS_fnc_taskExists) then {
+			[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
+		};
 		call LND_fnc_taskSuccessCheck;
 	}];
 
