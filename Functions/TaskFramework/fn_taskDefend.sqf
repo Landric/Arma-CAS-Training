@@ -101,8 +101,36 @@ LND_fnc_spawnBlufor = {
 	// _blufor_group enableDynamicSimulation true;
 	// { _x triggerDynamicSimulation false; } forEach units _blufor_group;
 	{
+
+		if(LND_defendDifficulty <= 1) then {
+			private _unit = _x;
+			_contents = vestItems _unit;
+			removeVest _unit;
+			_unit addVest "V_Safety_yellow_F";
+			{
+				if(_unit canAddItemToUniform _x) then { _unit addItemToUniform _x; } else { break; };
+			} forEach _contents;
+		};
+
 		// TODO: Balance the damage grace
-		_x addeventhandler ["handledamage",{ (_this select 2) / 2}];
+		_x addeventhandler ["handledamage", {
+			
+			_dmg = switch (LND_defendDifficulty) do {
+				// Disabled
+				case 0: { throw "Defend tasks are disabled - why are we generating one?!"; };
+				// Easy
+				case 1: { (_this select 2) / 8 };
+				// Medium
+				case 2: { (_this select 2) / 4 };
+				// Hard
+				case 3: { (_this select 2) / 2 };
+				// Extreme
+				case 4: { (_this select 2) };
+				// Unknown
+				default { throw format ["Unexpected Defend task difficulty: %1", LND_defendDifficulty]; };
+			};
+			_dmg
+		}];
 		_x addEventHandler ["Killed", {
 			params ["_unit", "_killer"];
 			if(isPlayer _killer) then {
