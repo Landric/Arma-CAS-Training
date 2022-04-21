@@ -31,7 +31,7 @@ _plane_locations = [];
 } forEach allMapMarkers;
 
 
-_mod_helos = ["UK3CB_BAF_Wildcat_AH1_CAS_6A_Arctic", "UK3CB_BAF_Apache_AH1_DDPM", "RHS_UH60M_d", "RHS_MELB_AH6M", "RHS_Mi24V_vdv", "vn_b_air_ah1g_04"];
+_mod_helos = ["UK3CB_BAF_Wildcat_AH1_CAS_6A_Arctic", "UK3CB_BAF_Apache_AH1_DDPM", "RHS_UH60M_d", "RHS_MELB_AH6M", "RHS_Mi24V_vdv", "vn_b_air_ah1g_04", "ls_cis_hmp", "lsd_heli_laati", "Deffkopta_02_1"];
 {
 	if(count _helo_locations < 1) then {
 		break;
@@ -46,7 +46,7 @@ _mod_helos = ["UK3CB_BAF_Wildcat_AH1_CAS_6A_Arctic", "UK3CB_BAF_Apache_AH1_DDPM"
 } forEach _mod_helos;
 
 
-_mod_planes = ["RHS_Su25SM_vvs", "FIR_AV8B", "RHS_A10", "vn_b_air_f4b_navy_cas"];
+_mod_planes = ["RHS_Su25SM_vvs", "FIR_AV8B", "RHS_A10", "vn_b_air_f4b_navy_cas", "ML700_Avenger_BLU", "TIOW_Valkyrie_Rocket_M_B"];
 {
 	if(count _plane_locations < 1) then {
 		break;

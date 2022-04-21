@@ -78,16 +78,27 @@ class Params
 	class BLUFORFaction
 	{
 		title = "BLUFOR";
-		texts[] = {"NATO"};
-		values[] = {0};
+		texts[] = {
+			"NATO",
+			"Cadian (Requires TIOW)",
+			"GAR: 501st (Requires LSB)"
+		};
+		values[] = {0,1,2};
 		default = 0;
 	};
 
 	class OPFORFaction
 	{
 		title = "OPFOR";
-		texts[] = {"CSAT", "AAF", "MDF (Requires 3CB)", "AFRF (Requires RHS: AFRF)"};
-		values[] = {0,1,2,3};
+		texts[] = {
+			"CSAT",
+			"AAF",
+			"MDF (Requires 3CB)",
+			"AFRF (Requires RHS: AFRF)",
+			"Chaos Marines (Requires TIOW)",
+			"CIS (Requires LSB)"
+		};
+		values[] = {0,1,2,3,4,5};
 		default = 0;
 	};
 
