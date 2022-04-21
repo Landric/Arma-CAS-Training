@@ -183,10 +183,10 @@ private _usedRoadSegments = [];
 			if(LND_intel >=4) then { systemChat "Checking if disabled...."; };
 			if((not canFire _unit) or (not canMove _unit) or {alive _x} count crew _unit <= 0 ) then {
 				if(LND_intel >=4) then { systemChat "Vehicle disabled!"; };
-				private _t = format ["tsk%1_%2", LND_taskCounter, _unit];
-				if(_t call BIS_fnc_taskExists) then {
-					[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
-				};
+				// private _t = format ["tsk%1_%2", LND_taskCounter, (str (vehicle _unit)) splitString " -:" joinString "_"];
+				// if(_t call BIS_fnc_taskExists) then {
+				// 	[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
+				// };
 				call LND_fnc_taskSuccessCheck;
 			}
 			else{
@@ -198,19 +198,32 @@ private _usedRoadSegments = [];
 	_v addEventHandler ["Killed", {
 		params ["_unit", "_killer", "_instigator", "_useEffects"];
 		if(LND_intel >=4) then { systemChat format ["Vehicle %1 KILLED by %2", _unit, _killer]; };
-		private	_t = format ["tsk%1_%2", LND_taskCounter, _unit];
-		if(_t call BIS_fnc_taskExists) then {
-			[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
-		};
+		// private	_t = format ["tsk%1_%2", LND_taskCounter, (str (vehicle _unit)) splitString " -:" joinString "_"];
+		// if(_t call BIS_fnc_taskExists) then {
+		// 	[_t, "SUCCEEDED"] call BIS_fnc_taskSetState;
+		// };
 		call LND_fnc_taskSuccessCheck;
 	}];
+
+	// TODO: Move "main" task location if "main" vehicle destroyed
 
 	LND_opforPriorityTargets pushBack _v;
 
 	// While convoys are unpredictable, force task markers for all vehicles in convoy at all but the lowest intel level
 	// TODO: Remove once fixed
 	if(LND_intel >= 3 or (LND_intel >= 1 and ((_waypoint select 0) isEqualTo "CON"))) then {
-		_task = [true, [format ["tsk%1_%2", LND_taskCounter, _v], format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
+		private _t = format ["tsk%1_%2", LND_taskCounter, (str _v splitString " -:" joinString "_")];
+		_task = [true, [_t, format ["tsk%1", LND_taskCounter]], ["", "Destroy Hostiles", _position], [_v, true], "CREATED", -1, false, "destroy"] call BIS_fnc_taskCreate;
+		_trg = createTrigger ["EmptyDetector", _position, false];
+		_trg setTriggerArea [0, 0, 0, false];
+		_trg setVariable ["_v", vehicle _v];
+		_trg setVariable ["_task", _task];
+		_trg setTriggerStatements 
+		[
+			"((thisTrigger getVariable ""_task"") call BIS_fnc_taskExists) and (((not canFire (thisTrigger getVariable ""_v"")) and (not canMove (thisTrigger getVariable ""_v""))) or ({alive _x} count crew (thisTrigger getVariable ""_v"") <= 0))",
+			"[(thisTrigger getVariable ""_task""), ""SUCCEEDED""] call BIS_fnc_taskSetState",
+			"deleteVehicle thisTrigger"
+		];
 	};
 
 	if(count _waypoint > 0) then {
