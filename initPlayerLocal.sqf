@@ -10,6 +10,11 @@ _player createDiaryRecord ["Diary", ["CAS Training", "Welcome to Close Air Suppo
 if(isClass(configFile >> "CfgPatches" >> "ace_interaction")) then {
 	_player addItem "ACE_Flashlight_XL50";
 	_player addItem "ACE_MapTools";
+
+	for "_i" from 0 to 7 do {
+		_player addItem "ACE_packingBandage";
+		_player addItem "ACE_quikclot";	
+	};
 };
 
 if( ["_playerDamage", 1] call BIS_fnc_getParamValue == 0) then {
