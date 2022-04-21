@@ -8,7 +8,7 @@ class EditorData
 	toggles=513;
 	class ItemIDProvider
 	{
-		nextID=180;
+		nextID=187;
 	};
 	class MarkerIDProvider
 	{
@@ -20,10 +20,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={15142.253,68.662125,16838.701};
-		dir[]={-0.033974264,-0.53573197,0.84370446};
-		up[]={-0.02155537,0.84438801,0.53529817};
-		aside[]={0.99919021,1.8626451e-009,0.040235363};
+		pos[]={15097.661,83.194191,16792.861};
+		dir[]={0.40858212,-0.72687268,0.5520156};
+		up[]={0.43243796,0.6867702,0.5842455};
+		aside[]={0.8037805,-5.7276338e-008,-0.59492922};
 	};
 };
 binarizationWanted=0;
@@ -51,13 +51,14 @@ addons[]=
 	"A3_Modules_F",
 	"A3_Ui_F",
 	"A3_Air_F_Exp_VTOL_01",
-	"A3_Air_F_Heli_Light_02"
+	"A3_Air_F_Heli_Light_02",
+	"A3_Soft_F_Orange_Van_02"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=14;
+		items=15;
 		class Item0
 		{
 			className="A3_Air_F_EPC";
@@ -156,11 +157,19 @@ class AddonsMetaData
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
+		class Item14
+		{
+			className="A3_Soft_F_Orange";
+			name="Arma 3 Orange - Unarmored Land Vehicles";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
 	};
 };
 dlcs[]=
 {
-	"Expansion"
+	"Expansion",
+	"Orange"
 };
 randomSeed=1085861;
 class ScenarioData
@@ -229,7 +238,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=40;
+		items=43;
 		class Item0
 		{
 			dataType="Object";
@@ -299,8 +308,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={15179.794,19.826004,16738.002};
-				angles[]={0,0.79309511,0};
+				position[]={15184.458,19.826004,16733.721};
+				angles[]={-0,0.79309511,0};
 			};
 			side="Empty";
 			flags=4;
@@ -341,8 +350,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={15188.85,20.223476,16729.41};
-				angles[]={0,0.7833038,0};
+				position[]={15191.354,20.223476,16726.518};
+				angles[]={-0,0.7833038,0};
 			};
 			side="Empty";
 			flags=4;
@@ -383,8 +392,8 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={15171.046,19.835587,16747.084};
-				angles[]={0,0.77820742,0};
+				position[]={15176.975,19.835587,16740.695};
+				angles[]={-0,0.77820742,0};
 			};
 			side="Empty";
 			flags=4;
@@ -1148,7 +1157,7 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={15187.773,17.91,16725.797};
+				position[]={15190.277,17.91,16722.904};
 			};
 			presenceCondition="([""RepairOnDemand"", 1] call BIS_fnc_getParamValue == 0)";
 			id=19;
@@ -1372,7 +1381,7 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={15177.806,17.91,16736.109};
+				position[]={15182.47,17.91,16731.828};
 			};
 			presenceCondition="([""RepairOnDemand"", 1] call BIS_fnc_getParamValue == 0)";
 			id=20;
@@ -1596,7 +1605,7 @@ class Mission
 			dataType="Logic";
 			class PositionInfo
 			{
-				position[]={15168.92,17.91,16746.012};
+				position[]={15174.849,17.91,16739.623};
 			};
 			presenceCondition="([""RepairOnDemand"", 1] call BIS_fnc_getParamValue == 0)";
 			id=21;
@@ -2759,6 +2768,262 @@ class Mission
 					};
 				};
 				nAttributes=2;
+			};
+		};
+		class Item40
+		{
+			dataType="Trigger";
+			position[]={15193.412,17.91,16750.525};
+			class Attributes
+			{
+				condition="this and ([""RepairOnDemand"", 1] call BIS_fnc_getParamValue == 0)";
+				onActivation="{" \n "    if(isPlayer _x) then {" \n "        _x setDamage 0;" \n "    };" \n "} forEach thisList;";
+				repeatable=1;
+				activationBy="ANYPLAYER";
+				isServerOnly=1;
+			};
+			id=184;
+			type="EmptyDetectorAreaR50";
+		};
+		class Item41
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={15170.604,19.699785,16746.494};
+				angles[]={0,0.76071918,0};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+				presenceCondition="([""RepairOnDemand"", 1] call BIS_fnc_getParamValue == 0)";
+			};
+			id=185;
+			type="C_IDAP_Van_02_medevac_F";
+		};
+		class Item42
+		{
+			dataType="Logic";
+			class PositionInfo
+			{
+				position[]={15169.522,17.91,16745.777};
+			};
+			presenceCondition="([""RepairOnDemand"", 1] call BIS_fnc_getParamValue == 0)";
+			id=186;
+			type="ModuleTaskCreate_F";
+			class CustomAttributes
+			{
+				class Attribute0
+				{
+					property="ModuleTaskCreate_F_Destination";
+					expression="_this setVariable ['Destination',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"SCALAR"
+								};
+							};
+							value=1;
+						};
+					};
+				};
+				class Attribute1
+				{
+					property="ModuleTaskCreate_F_Type";
+					expression="_this setVariable ['Type',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="heal";
+						};
+					};
+				};
+				class Attribute2
+				{
+					property="ModuleTaskCreate_F_ShowNotification";
+					expression="_this setVariable ['ShowNotification',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"SCALAR"
+								};
+							};
+							value=0;
+						};
+					};
+				};
+				class Attribute3
+				{
+					property="ModuleTaskCreate_F_Marker";
+					expression="_this setVariable ['Marker',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="";
+						};
+					};
+				};
+				class Attribute4
+				{
+					property="ModuleTaskCreate_F_Title";
+					expression="_this setVariable ['Title',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="Heal (Optional)";
+						};
+					};
+				};
+				class Attribute5
+				{
+					property="ModuleTaskCreate_F_Description";
+					expression="_this setVariable ['Description',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="";
+						};
+					};
+				};
+				class Attribute6
+				{
+					property="ModuleTaskCreate_F_ID";
+					expression="_this setVariable ['ID',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="tsk_heal";
+						};
+					};
+				};
+				class Attribute7
+				{
+					property="ModuleTaskCreate_F_AlwaysVisible";
+					expression="_this setVariable ['AlwaysVisible',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"SCALAR"
+								};
+							};
+							value=0;
+						};
+					};
+				};
+				class Attribute8
+				{
+					property="ModuleTaskCreate_F_Owner";
+					expression="_this setVariable ['Owner',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"SCALAR"
+								};
+							};
+							value=3;
+						};
+					};
+				};
+				class Attribute9
+				{
+					property="ModuleTaskCreate_F_State";
+					expression="_this setVariable ['State',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="CREATED";
+						};
+					};
+				};
+				class Attribute10
+				{
+					property="ModuleTaskCreate_F_IDParent";
+					expression="_this setVariable ['IDParent',_value,true];";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"STRING"
+								};
+							};
+							value="tsk_rtb";
+						};
+					};
+				};
+				nAttributes=11;
 			};
 		};
 	};
