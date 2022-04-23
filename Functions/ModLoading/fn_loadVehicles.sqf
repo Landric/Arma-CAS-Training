@@ -16,6 +16,55 @@ scriptName "LND\functions\LoadMods\fn_loadVehicles.sqf";
 		call LND_fnc_loadVehicles;
 */
 
+
+LND_fnc_addVehicleScripts = {
+	params ["_vehicle"];
+
+	LND_playerVehicles pushBack _vehicle;
+
+	_vehicle setVariable ["_respawnPos", getPos _vehicle];
+	_vehicle setVariable ["_respawnDir", getDir _vehicle];
+	
+	_vehicle addEventHandler ["Killed", {
+		params ["_unit", "_killer", "_instigator", "_useEffects"];
+		{ _x setDamage 0; _x setPos getMarkerPos "respawn_start"; } forEach crew _unit;
+		_unit setPos [0,0,0];
+		_type = typeOf _unit;
+		_pos = _unit getVariable "_respawnPos";
+		_dir = _unit getVariable "_respawnDir";
+		deleteVehicle _unit;
+		LND_playerVehicles = LND_playerVehicles - [objNull];
+
+		[_type, _pos, _dir] spawn {
+			params ["_type", "_pos", "_dir"];
+			sleep 0.5;
+			_v = _type createVehicle _pos;
+			_v setDir _dir;
+			[_v] call LND_fnc_addVehicleScripts;
+		};
+	}];
+
+	if (["RepairOnDemand", 1] call BIS_fnc_getParamValue == 1) then {
+		_vehicle addAction [ 
+			"Repair and Resupply", 
+			{ 
+				_target = _this select 0;
+				_target setDamage 0;
+				_target setFuel 1;
+				_target setVehicleAmmo 1;
+				{ _x setDamage 0; } forEach crew _target;
+			}, 
+			nil, 
+			10, 
+			false, 
+			true 
+		];
+	};
+	
+};
+
+
+
 _helo_locations = [];
 _plane_locations = [];
 {
@@ -31,7 +80,7 @@ _plane_locations = [];
 } forEach allMapMarkers;
 
 
-_mod_helos = ["UK3CB_BAF_Wildcat_AH1_CAS_6A_Arctic", "UK3CB_BAF_Apache_AH1_DDPM", "RHS_UH60M_d", "RHS_MELB_AH6M", "RHS_Mi24V_vdv", "vn_b_air_ah1g_04", "ls_cis_hmp", "lsd_heli_laati", "Deffkopta_02_1"];
+_mod_helos = ["UK3CB_BAF_Wildcat_AH1_CAS_6A_Arctic", "UK3CB_BAF_Apache_AH1_DDPM", "RHS_UH60M_d", "RHS_MELB_AH6M", "RHS_Mi24V_vdv", "RHS_Ka52_vvsc", "vn_b_air_ah1g_04", "ls_cis_hmp", "lsd_heli_laati", "Deffkopta_02_1"];
 {
 	if(count _helo_locations < 1) then {
 		break;
@@ -40,7 +89,6 @@ _mod_helos = ["UK3CB_BAF_Wildcat_AH1_CAS_6A_Arctic", "UK3CB_BAF_Apache_AH1_DDPM"
 	if(isNull _helo) then { continue; }
 	else {
 		_helo setDir 68; // TODO: better to deliberately choose the spawn location in editor so that it is always (say) north, for cross-map compatibility
-		v_respawn synchronizeObjectsAdd [_helo];
 		_helo_locations deleteAt 0;
 	};
 } forEach _mod_helos;
@@ -55,7 +103,6 @@ _mod_planes = ["RHS_Su25SM_vvs", "FIR_AV8B", "RHS_A10", "vn_b_air_f4b_navy_cas",
 	if(isNull _plane) then { continue; }
 	else {
 		_plane setDir 221; // TODO: better to deliberately choose the spawn location in editor so that it is always (say) south, for cross-map compatibility
-		v_respawn synchronizeObjectsAdd [_plane];
 		_plane_locations deleteAt 0;
 	};
 } forEach _mod_planes;
@@ -66,31 +113,9 @@ _mod_planes = ["RHS_Su25SM_vvs", "FIR_AV8B", "RHS_A10", "vn_b_air_f4b_navy_cas",
 _ac130 = "USAF_AC130U" createVehicle (getMarkerPos "marker_ac130");
 if(not isNull _ac130) then {
 	_ac130 setDir 221; // TODO: better to deliberately choose the spawn location in editor so that it is always (say) west, for cross-map compatibility
-	v_respawn synchronizeObjectsAdd [_ac130];
 };
 
 
-// TODO: v_respawn synchronizeObjectsAdd *is* synchronising the vehicles, but they still aren't respawning for some reason
-// TODO: Vehicles only respawn if abandoned ONCE; this is a bug with the module itself.
-
-
-
-if (["RepairOnDemand", 1] call BIS_fnc_getParamValue == 1) then {
-	//_vehicles = nearestObjects [getPos player, ["helicopter", "plane"], 1000];
-	{
-		_x addAction [ 
-			"Repair and Resupply", 
-			{ 
-			 _target = _this select 0;
-			 _target setDamage 0;
-			 _target setFuel 1;
-			 _target setVehicleAmmo 1;
-			 { _x setDamage 0; } forEach crew _target;
-			}, 
-			nil, 
-			10, 
-			false, 
-			true 
-		];
-	} forEach vehicles;
-};
+{
+	[_x] call LND_fnc_addVehicleScripts;
+} forEach vehicles;

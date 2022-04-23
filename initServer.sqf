@@ -20,6 +20,8 @@ if(LND_convoyDifficulty >= 1) then { LND_taskTypes pushBack LND_fnc_taskConvoy }
 
 setTimeMultiplier 0.1;
 
+LND_playerVehicles = [];
+
 LND_bluforInfantry = [];
 LND_ffIncidents = 0;
 

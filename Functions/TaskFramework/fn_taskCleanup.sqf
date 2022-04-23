@@ -27,7 +27,7 @@ if (not (format ["tsk%1", LND_taskCounter] call BIS_fnc_taskCompleted)) then {
 	{ if(not (side _x == west)) then {deleteVehicle _x }; } forEach allUnits;
 	{ deleteVehicle _x } forEach LND_bluforUnits;
 	{ deleteVehicle _x } forEach allDead;
-	{ if(not (_x in synchronizedObjects v_respawn)) then { deleteVehicle _x; }; } forEach vehicles;
+	{ if(not (_x in LND_playerVehicles)) then { deleteVehicle _x; }; } forEach vehicles;
 	if(not isNull LND_smoke) then {	deleteVehicle LND_smoke; };
 
 	{
