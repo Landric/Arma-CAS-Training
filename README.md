@@ -10,9 +10,6 @@ While this scenario can be played with no mods or CDLC, it aims to be compatible
 If there is a faction or aircraft that you'd like to see represented in this scenario, leave a comment!
 
 #### Known Issues
-* Vehicle respawn module:
-  - Vehicles added from mods are not synched properly and will not respawn
-  - Vehicles will only respawn after being abandoned ONCE
 * Convoy missions:
   - Convoy routing is naive at best - they will likely never reach a sensible destination (but that's okay)
 * Multiplayer:
