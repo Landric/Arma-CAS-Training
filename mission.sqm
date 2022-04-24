@@ -20,10 +20,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={15060.096,108.99358,16830.975};
-		dir[]={0.56046933,-0.64642799,0.51769203};
-		up[]={0.47485572,0.76297498,0.43861282};
-		aside[]={0.6785177,1.4901161e-008,-0.73458409};
+		pos[]={15146.036,43.485455,16757.818};
+		dir[]={0.79639554,-0.58416659,-0.1565503};
+		up[]={0.57319957,0.81163138,-0.11267596};
+		aside[]={-0.19288239,1.1175871e-008,-0.98122501};
 	};
 };
 binarizationWanted=0;
@@ -2595,6 +2595,29 @@ class Mission
 			};
 			id=185;
 			type="C_IDAP_Van_02_medevac_F";
+			class CustomAttributes
+			{
+				class Attribute0
+				{
+					property="allowDamage";
+					expression="_this allowdamage _value;";
+					class Value
+					{
+						class data
+						{
+							class type
+							{
+								type[]=
+								{
+									"BOOL"
+								};
+							};
+							value=0;
+						};
+					};
+				};
+				nAttributes=1;
+			};
 		};
 		class Item41
 		{
