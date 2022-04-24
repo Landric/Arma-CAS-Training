@@ -35,16 +35,6 @@ if( ["RespawnOnDemand", 1] call BIS_fnc_getParamValue == 1) then {
 		"Respawn",  
 		{
 			params ["_target", "_caller", "_actionId", "_arguments"];
-			if(vehicle _caller != _caller) then {
-				if(count crew vehicle _caller <= 1) then {
-					[vehicle _caller] spawn {
-					params ["_vehicle"];
-						sleep 2;
-						_vehicle setPos [0,0,0];
-						_vehicle setDamage 1;
-					};
-				};
-			};
 			_caller setDamage 0; 
 			_caller setPos startPos;
 			_caller setDir startDir;
@@ -62,15 +52,38 @@ if( ["RespawnOnDemand", 1] call BIS_fnc_getParamValue == 1) then {
 };
 
 
-// Can't rely on the code in the "expression" of the vehicle respawn module due to a bug in the underlying engine
+
 _player addEventHandler ["GetOutMan", {
 	params ["_unit", "_role", "_vehicle", "_turret"];
-	
+
 	if(!alive _vehicle) then {
 		_unit setDamage 0;
 		_unit setPos startPos;
 		_unit setDir startDir;
 		_unit setVelocity [0, 0, 0];
+	}
+	else{
+		if (count crew _vehicle == 0) then {
+			[_unit, _vehicle] spawn {
+
+				params ["_player", "_vehicle"];
+
+				waitUntil {
+					sleep 1; 
+
+					private _abandoned = true;
+					{
+						if(_x distance _vehicle < 100) then { _abandoned = false; break; };
+					} forEach allPlayers;
+
+					_abandoned or count crew _vehicle > 0
+				};	
+				if (count crew _vehicle == 0) then {
+					_vehicle setPos [0,0,0];
+					_vehicle setDamage 1;
+				};
+			};
+		};
 	};
 }];
 
