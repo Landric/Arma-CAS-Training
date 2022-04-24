@@ -118,7 +118,7 @@ LND_fnc_replaceKeys = {
 				_v = (_v select [0, (count _v)-1]) + "ies";
 			};
 			if(_lastChar isEqualTo "s") exitWith {
-				_v = (_v select [0, (count _v)-1]) + "es";
+				_v = _v + "es";
 			};
 			_v = _v + "s";
 		};
